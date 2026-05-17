@@ -254,23 +254,53 @@ python run_graybox.py --status
 Pusat kendali yang mengkoordinasikan seluruh workflow:
 
 ```
-Step 1: ATTACK CHAINING (MITRE ATT&CK)
-  ├── Phase 1: Initial Access → T1078 (Valid Accounts)
-  ├── Phase 2: Discovery → T1087, T1046, T1069
-  ├── Phase 3: Exploitation → T1210 (BOLA), T1068 (Priv Esc)
-  └── Phase 4: Impact → T1213 (Data Collection)
+Step 1: RECONNAISSANCE (8 automated tools)
+  ├── Subdomain enum → subfinder + crt.sh + dnsx + httpx
+  ├── Tech fingerprinting → whatweb + favicon + headers + DNS
+  ├── JS recon → 9-phase pipeline (secrets, endpoints, crypto)
+  ├── Hidden endpoints → wellknown + leaks + error logs + FFUF
+  └── API discovery → Swagger + Kiterunner + Arjun
 
-Step 2: LEGAL AUDIT (RAG + UU PDP)
-  ├── Query: "pelanggaran data pribadi akses tidak sah"
-  ├── Retrieve: 3 relevant passages from ChromaDB
-  └── Map: Technical finding → Legal article → Sanctions
+Step 2: VULNERABILITY SCANNING (8 automated tools)
+  ├── Nuclei → 1000+ CVE templates + headless DOM testing
+  ├── SQLMap → SQL injection automated
+  ├── Dalfox → XSS automated
+  ├── Param reflection → XSS/open redirect candidates
+  ├── CORS scan → misconfiguration testing
+  ├── LFI → path traversal automated
+  ├── SSTI → template injection automated
+  └── Open Redirect → automated testing
 
-Step 3: GENERATING UNIFIED REPORT
-  ├── Technical evidence (PoC)
-  ├── MITRE ATT&CK mapping (Navigator layer)
-  ├── UU PDP legal mapping (Pasal 35, 38, 39, 46, 57)
-  ├── Sigma Rules for Wazuh SIEM
-  └── Remediation recommendations
+Step 3: AUTH & AUTHORIZATION TESTING
+  ├── JWT analysis, auth heartbeat, IDOR/BOLA
+  ├── Mass assignment, privilege escalation
+  └── Two-account testing (attacker vs victim)
+
+Step 4: EXPLOITATION (Metasploit)
+  ├── Module search, payload generation
+  ├── Exploit execution (if in scope)
+  └── Post-exploitation enumeration
+
+Step 5: ADVANCED TESTING
+  ├── WAF profiling & bypass, HTTP smuggling
+  ├── Race condition, WebSocket testing
+  ├── Error triggering, HTTP methods
+  └── GraphQL, Next.js Server Actions
+
+Step 6: FINDINGS VALIDATION & SCORING
+  ├── CVSS v3.1 scoring (proper vector strings)
+  ├── Triage & prioritization (ROI scoring)
+  └── 9-gate validation before report
+
+Step 7: LEGAL COMPLIANCE AUDIT
+  ├── RAG-based legal mapping → UU PDP
+  ├── MITRE ATT&CK mapping → techniques + sanctions
+  └── Export Navigator layer + chain report
+
+Step 8: REPORT GENERATION
+  ├── Markdown report (CVSS + MITRE + UU PDP)
+  ├── PDF conversion (WeasyPrint)
+  └── Display results + artifact list
 ```
 
 ---
@@ -392,30 +422,61 @@ python run_graybox.py
 ### Phases
 
 ```
-Phase 1: Initial Access
-  ├── Login dengan credentials → T1078
-  └── Capture session details → T1539
+Phase 1: Reconnaissance (Automated)
+  ├── Subdomain enumeration → subfinder + crt.sh + dnsx + httpx
+  ├── Technology fingerprinting → whatweb + favicon + headers + DNS
+  ├── JavaScript reconnaissance → JS recon pipeline (9 phases)
+  ├── Hidden endpoint discovery → wellknown + leaks + error logs + FFUF
+  └── API discovery → Swagger + Kiterunner + Arjun
 
-Phase 2: Discovery
-  ├── Account discovery → T1087
-  ├── API endpoint discovery → T1046
-  └── Permission discovery → T1069
+Phase 2: Vulnerability Scanning (Automated)
+  ├── Nuclei CVE scanning → 1000+ templates + headless DOM testing
+  ├── SQL injection → SQLMap automated scanning
+  ├── XSS testing → Dalfox automated scanning
+  ├── Parameter reflection → XSS/open redirect candidates
+  ├── CORS misconfiguration → origin reflection, null, wildcard
+  ├── LFI/Path Traversal → lfimap automated testing
+  ├── SSTI → tplmap automated testing
+  └── Open Redirect → openredirex automated testing
 
-Phase 3: Exploitation
-  ├── BOLA/IDOR testing → T1210
-  ├── Mass assignment → T1098
-  └── Privilege escalation → T1068
+Phase 3: Authentication & Authorization
+  ├── Authentication testing → JWT analysis, auth heartbeat
+  ├── IDOR/BOLA testing → object-level authorization on all endpoints
+  ├── Mass assignment → test all POST/PATCH endpoints
+  ├── Privilege escalation → horizontal + vertical testing
+  └── Two-account testing → attacker vs victim comparison
 
-Phase 3.5: Metasploit Exploitation (Conditional)
-  ├── Search exploits for detected services → msfconsole_search
-  ├── Generate custom payloads → msfvenom_generate_payload
-  ├── Execute known CVE exploits → msfconsole_exploit
-  └── Post-exploitation enumeration → msfconsole_post
+Phase 4: Exploitation (Metasploit)
+  ├── Module search → find exploits for detected technology
+  ├── Payload generation → msfvenom (reverse shells, webshells, APKs)
+  ├── Exploit execution → run matched exploits (if in scope)
+  └── Post-exploitation → session management, system enumeration
 
-Phase 4: Impact Assessment
-  ├── Data collection → T1005, T1213
-  ├── Data exfiltration → T1567
-  └── Impact analysis → T1485, T1486
+Phase 5: Advanced Testing
+  ├── WAF profiling & bypass → wafw00f + WAF engine + adaptive bypass
+  ├── HTTP smuggling → CL.TE, TE.CL, TE.TE + HTTP/3 downgrade
+  ├── Race condition → concurrent request testing (20-50 requests)
+  ├── WebSocket testing → connection without auth, message injection
+  ├── Error triggering → stack trace discovery via malformed input
+  ├── HTTP methods → allowed method enumeration
+  ├── GraphQL → introspection, field suggestions, CSRF via GET
+  └── Next.js → Server Action authorization bypass
+
+Phase 6: Findings Validation & Scoring
+  ├── Save findings → memory.db persistence
+  ├── CVSS v3.1 scoring → proper vector strings
+  ├── Triage & prioritization → ROI scoring (payout/effort)
+  └── Pre-report quality check → 6-item validation gate
+
+Phase 7: Legal Compliance Audit
+  ├── RAG-based legal mapping → technical finding → UU PDP article
+  ├── MITRE ATT&CK mapping → technique → tactic → sanctions
+  └── Export MITRE artifacts → Navigator layer + chain report
+
+Phase 8: Report Generation
+  ├── Markdown report → full pentest report with CVSS + MITRE + UU PDP
+  ├── PDF conversion → WeasyPrint professional styling
+  └── Display results → findings summary + artifact list
 ```
 
 ---
@@ -454,7 +515,7 @@ Phase 4: Impact Assessment
 | **Integrasi Sistem (25%)** | AI Agent ↔ Wazuh SIEM ↔ Threat Hunting | Sigma Rules, IOC feed, alert correlation |
 | **Ketajaman Teknis (25%)** | MITRE ATT&CK mapping (333 techniques), 140+ MCP tools, Metasploit integration | Navigator layer, chain report, PoC, payload generation |
 | **Analisis Hukum PDP (20%)** | 48/48 UU PDP articles mapped, RAG-based legal audit | Legal mapping matrix, sanctions reference |
-| **Otomasi & Efisiensi (15%)** | One-command runner, auto-report generation | `run_graybox.py`, credential manager |
+| **Otomasi & Efisiensi (15%)** | Full 8-phase pipeline, 30+ automated tools, one-command execution | `/pentest` slash command, credential manager, anti-looping |
 | **Presentasi (15%)** | Dokumentasi lengkap, slide-ready | README.md, reports, quickstart guide |
 
 ---
@@ -495,7 +556,7 @@ cat graybox-*-report.md
 
 | Command | Fungsi |
 |---------|--------|
-| `/pentest` | Full gray box pentest via OpenCode slash command (credentials → MITRE → CVSS → UU PDP → MD + PDF) |
+| `/pentest` | **FULL PIPELINE** — 8 phases: recon → vuln scan → auth → exploit → advanced → validate → legal → report |
 | `python run_graybox.py` | Run gray box pentest dengan stored credentials |
 | `python run_graybox.py --setup` | Interactive credential setup |
 | `python run_graybox.py --status` | Show credential status |
@@ -564,5 +625,5 @@ Project ini dibuat untuk keperluan akademik Capstone Project Cybersecurity 2026.
 
 ---
 
-**Project Status:** 🟢 *Production Ready — Full MITRE + UU PDP + Metasploit Integration*
+**Project Status:** 🟢 *Production Ready — Full 8-Phase Automated Pipeline (30+ Tools)*
 **Last Updated:** May 17, 2026
