@@ -1,0 +1,13 @@
+     {
+       "mcpServers": {
+         "security-tools": {
+           "command": "python3",
+           "args": [
+             "/home/vedara/claude-skills/bug-bounty/scripts/mcp_security_server.py"
+           ],
+          "env": {
+            "PYTHONPATH": "/home/vedara/claude-skills/bug-bounty/scripts"
+          }
+        }
+      }
+    }

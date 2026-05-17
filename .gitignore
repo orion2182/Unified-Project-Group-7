@@ -1,0 +1,61 @@
+# Sensitive credentials & configs
+.env.graybox
+.env
+*.key
+*.pem
+*.crt
+config/secrets.yml
+config/database.yml
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# ChromaDB vector store (contains UU PDP data)
+db_uu_pdp/
+
+# Reports with sensitive findings
+reports/
+*.pdf
+*.md.bak
+
+# Metasploit payloads (binary exploits)
+payloads/
+*.exe
+*.elf
+*.apk
+*.war
+*.php
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# MCP node modules
+.opencode/node_modules/
