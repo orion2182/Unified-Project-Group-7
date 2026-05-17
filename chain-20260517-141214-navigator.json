@@ -1,0 +1,101 @@
+{
+  "name": "Attack Chain: chain-20260517-141214 - https://sum-massachusetts-authors-frog.trycloudflare.com",
+  "versions": {
+    "attack": "15",
+    "navigator": "5.0",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "MITRE ATT&CK mapping for gray box pentest against https://sum-massachusetts-authors-frog.trycloudflare.com",
+  "filters": {
+    "platforms": [
+      "Windows",
+      "Linux",
+      "macOS",
+      "Network",
+      "PRE",
+      "Containers",
+      "IaaS",
+      "SaaS",
+      "Google Workspace",
+      "Office 365",
+      "Azure AD"
+    ]
+  },
+  "sorting": 3,
+  "layout": {
+    "layout": "side",
+    "aggregateFunction": "average",
+    "showID": true,
+    "showName": true,
+    "showAggregateHeaders": true
+  },
+  "hideDisabled": true,
+  "techniques": [
+    {
+      "techniqueID": "T1078",
+      "tactic": "initial-access",
+      "color": "#FF0000",
+      "comment": "login_with_credentials\nUU PDP: Pasal 23, Pasal 35, Pasal 36, Pasal 39, Pasal 65\nAkses tidak sah terhadap data pribadi menggunakan kredensial valid (melanggar Pasal 39: pencegahan akses tidak sah, Pasal 65: larangan memperoleh data pribadi bukan miliknya)",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1087",
+      "tactic": "discovery",
+      "color": "#FFFF00",
+      "comment": "account_discovery\nUU PDP: Pasal 32, Pasal 38, Pasal 39\nPenemuan akun dan data pengguna tanpa otorisasi (melanggar Pasal 32: hak akses subjek data, Pasal 38: perlindungan dari pemrosesan tidak sah)",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1046",
+      "tactic": "discovery",
+      "color": "#FFFF00",
+      "comment": "api_endpoint_discovery\nUU PDP: Pasal 31, Pasal 38\nDiscovery layanan jaringan tanpa otorisasi (melanggar Pasal 31: perekaman kegiatan)",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1210",
+      "tactic": "lateral-movement",
+      "color": "#8B0000",
+      "comment": "lateral_movement_api\nUU PDP: Pasal 38, Pasal 39, Pasal 51\nEksploitasi remote services untuk pergerakan lateral ke data pribadi di sistem lain (melanggar Pasal 38: perlindungan dari pemrosesan tidak sah, Pasal 39: pencegahan akses tidak sah)",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1068",
+      "tactic": "privilege-escalation",
+      "color": "#FF4500",
+      "comment": "privilege_escalation_exploit\nUU PDP: Pasal 35, Pasal 36, Pasal 39\nEksploitasi kerentanan untuk eskalasi hak akses ke data pribadi (melanggar Pasal 35: keamanan data, Pasal 36: langkah teknis, Pasal 39: pencegahan akses tidak sah)",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1213",
+      "tactic": "collection",
+      "color": "#00FFFF",
+      "comment": "data_from_info_repos\nUU PDP: Pasal 16, Pasal 35, Pasal 38\nPengumpulan data dari repositori informasi (melanggar Pasal 16: pemrosesan data, Pasal 35: keamanan data)",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#ff6666",
+      "#ffe766",
+      "#8ec843"
+    ],
+    "minValue": 0,
+    "maxValue": 100
+  },
+  "metadata": [
+    {
+      "name": "Target",
+      "value": "https://sum-massachusetts-authors-frog.trycloudflare.com"
+    },
+    {
+      "name": "Chain ID",
+      "value": "chain-20260517-141214"
+    },
+    {
+      "name": "UU PDP",
+      "value": "Pasal 32, Pasal 16, Pasal 23, Pasal 31, Pasal 38, Pasal 65, Pasal 39, Pasal 51, Pasal 36, Pasal 35"
+    }
+  ]
+}
