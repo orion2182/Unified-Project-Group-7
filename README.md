@@ -557,20 +557,6 @@ Load `navigator.json` ke [MITRE ATT&CK Navigator](https://mitre-attack.github.io
 - [Metasploit Framework](https://www.metasploit.com/) — Exploitation framework (msfvenom + msfconsole)
 - [ChromaDB](https://www.trychroma.com/) — Vector database
 
----
-
-## 👥 Tim
-
-**Kelompok 7 — Capstone Project Cybersecurity 2026**
-
-| Role | Deskripsi |
-|------|-----------|
-| **Target** | PT. Dana Sejahtera (Fintech Infrastructure) |
-| **Scope** | https://api.bank-pdp.local/v1/* |
-| **Platform** | JumpServer (10.10.10.101) |
-| **SIEM** | Wazuh HA Cluster |
-
----
 
 ## 📄 License
 
