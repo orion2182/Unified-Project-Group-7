@@ -2,28 +2,32 @@
 
 > **Capstone Project Cybersecurity 2026 — Kelompok 7**
 >
+> AI Engine: **Hermes Agent** (OpenSource) — 120+ MCP Tools via OpenCode Go
+>
 > Framework: **MITRE ATT&CK v19.1** (15 Tactics, 75+ Techniques) + **UU No. 27/2022** (UU PDP)
 >
 > Target: **PT. Dana Sejahtera** — Gray Box Penetration Testing via JumpServer Infrastruktur
 >
-> Pendekatan: **AI Agent Orchestration** dengan 30+ Automated Security Tools
+> Platform: **WhatsApp · Telegram · CLI · Discord** — Pentest dari mana aja, kapan aja
 
 ---
 
 ## 📋 Daftar Isi
 
 1. [Apa Itu Project Ini?](#-apa-itu-project-ini)
-2. [Arsitektur Sistem](#-arsitektur-sistem)
-3. [Struktur Folder](#-struktur-folder)
-4. [Komponen Utama](#-komponen-utama)
-5. [Workflow Pentest (8 Fase)](#-workflow-pentest-8-fase)
-6. [MITRE ATT&CK v19.1 Mapping](#-mitre-attck-v191-mapping)
-7. [UU PDP Compliance](#-uu-pdp-compliance-indonesia)
-8. [Setup & Cara Pakai](#-setup--cara-pakai)
-9. [Deliverables](#-deliverables)
-10. [Integrasi Sinergis (Project 4)](#-integrasi-sinergis-project-4)
-11. [Rubrik Penilaian](#-rubrik-penilaian)
-12. [Tim Pengembang](#-tim-pengembang)
+2. [Hermes Agent — Otak di Balik Semua](#-hermes-agent--otak-di-balik-semua)
+3. [Arsitektur Sistem](#-arsitektur-sistem)
+4. [Struktur Folder](#-struktur-folder)
+5. [Komponen Utama](#-komponen-utama)
+6. [Workflow Pentest (8 Fase)](#-workflow-pentest-8-fase)
+7. [MITRE ATT&CK v19.1 Mapping](#-mitre-attck-v191-mapping)
+8. [UU PDP Compliance](#-uu-pdp-compliance-indonesia)
+9. [Multi-Platform & Automation](#-multi-platform--automation)
+10. [Setup & Cara Pakai](#-setup--cara-pakai)
+11. [Deliverables](#-deliverables)
+12. [Integrasi Sinergis (Project 4)](#-integrasi-sinergis-project-4)
+13. [Rubrik Penilaian](#-rubrik-penilaian)
+14. [Tim Pengembang](#-tim-pengembang)
 
 ---
 
@@ -53,6 +57,128 @@ Banyak perusahaan punya celah keamanan tapi:
 - ❌ Laporan kepanjangan, susah dibaca manajemen
 
 **Unified-Shield fix semua itu** — dari scanning ➜ mapping ➜ laporan, sekali jalan.
+
+---
+
+## 🤖 Hermes Agent — Otak di Balik Semua
+
+**Unified-Shield bukan cuma script Python biasa.** Semua operasi dijalankan oleh **Hermes Agent** — AI agent open-source yang jadi "otak" dari seluruh sistem. Hermes yang berpikir, merencanakan, menjalankan, dan melaporkan. Lo tinggal perintah, dia yang kerja.
+
+### Kenapa Pake Hermes Agent?
+
+| Fitur Hermes | Manfaat Buat Pentest |
+|-------------|---------------------|
+| **🧠 AI Reasoning** | Gak cuma jalanin tool — dia *ngerti* hasil scan, nyambungin temuan, dan mutusin next step |
+| **🗂️ Persistent Memory** | Ingat semua temuan dari sesi sebelumnya. Gak mulai dari nol tiap kali — konteks nyambung |
+| **🎯 Skill System** | Workflow pentest disimpan sebagai "skill" reusable. Dijalanin persis, tiap saat, tanpa lupa step |
+| **🔌 120+ MCP Tools** | Satu agen bisa panggil Nmap, Nuclei, Metasploit, Burp Suite, dll langsung — gak perlu pindah-pindah terminal |
+| **📱 Multi-Platform** | Pentest bisa di-trigger dari WhatsApp, Telegram, CLI — hasil dikirim balik ke platform yang sama |
+| **⚡ Async & Delegate** | Scan paralel, sub-agent buat tugas berat, background process — semua jalan barengan |
+| **🔄 PTG (Penetration Task Graph)** | Anti-looping: tiap task di-track, status di-update real-time, gak ada kerjaan dobel |
+| **📊 Dashboard Real-time** | HTTP monitoring dashboard — liat traffic langsung, deteksi anomali, verifikasi blind injection |
+| **⏰ Cron Automation** | Jadwalin pentest otomatis tiap jam/hari/minggu — ideal buat continuous security testing |
+
+### Arsitektur Hermes Agent dalam Unified-Shield
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          HERMES AGENT PROFILE                                │
+│                          "kelompok7"                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │                        🧠 AI CORE (OpenCode Go)                       │   │
+│  │                                                                       │   │
+│  │  Model: deepseek-v4-pro / deepseek-v4-flash                          │   │
+│  │  Persona: AI Pentester Capstone Kelompok 7                           │   │
+│  │  Bahasa: Indonesia informal (gw/lo)                                  │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                         │
+│         ┌──────────────────────────┼──────────────────────────────┐          │
+│         │                          │                              │          │
+│         ▼                          ▼                              ▼          │
+│  ┌─────────────────┐    ┌──────────────────┐    ┌──────────────────────┐    │
+│  │  📱 PLATFORM    │    │  📚 SKILL        │    │  🛠️ MCP TOOLS        │    │
+│  │  CONNECTORS     │    │  SYSTEM          │    │  (120+ Tools)        │    │
+│  │                 │    │                  │    │                      │    │
+│  │ • WhatsApp      │    │ kelompok7-vpn    │    │ pentest-tools        │    │
+│  │   (62895...)    │    │ kelompok7-pentest│    │  └ 65 tools          │    │
+│  │                 │    │ kelompok7-pdp    │    │   (Nmap, Nuclei,     │    │
+│  │ • Telegram      │    │                  │    │    SQLMap, FFUF,     │    │
+│  │   (@bot)        │    │ bug-bounty       │    │    Metasploit, dll) │    │
+│  │                 │    │  └ ~50 skills    │    │                      │    │
+│  │ • CLI / Terminal│    │                  │    │ security-tools       │    │
+│  │                 │    │ hermes-agent     │    │  └ 200+ tools        │    │
+│  │ • Discord       │    │                  │    │   (Recon, Vuln,      │    │
+│  │   (webhook)     │    │ Autonomous-AI    │    │    Exploit, SAST,    │    │
+│  │                 │    │  └ codex,        │    │    WAF bypass,       │    │
+│  │                 │    │    claude-code   │    │    Compliance, dll)  │    │
+│  └────────┬────────┘    └────────┬─────────┘    │                      │    │
+│           │                      │              │ burp-api             │    │
+│           │                      │              │  └ Burp Suite        │    │
+│           │                      │              │    integration       │    │
+│           │                      │              └──────────┬───────────┘    │
+│           │                      │                         │                │
+│           ▼                      ▼                         ▼                │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │                     🔄 AUTOMATION ENGINE                              │   │
+│  │                                                                       │   │
+│  │  • Session persistence — memory.db + session DB                      │   │
+│  │  • Cron scheduler — daily recon, weekend swarm, watchdog             │   │
+│  │  • Delegate task — sub-agent buat kerjaan paralel                    │   │
+│  │  • Background process — scan async, monitor progress                 │   │
+│  │  • Real-time dashboard — HTTP monitoring + findings tracker          │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Setup Hermes Agent (Profile "kelompok7")
+
+Hermes Agent pake **profile system** — jadi setup Kelompok 7 terisolasi dari project lain (bug bounty, personal, dll).
+
+```yaml
+# ~/.hermes/config.yaml (partial)
+profile: kelompok7
+workdir: /home/vedara/Documents/Kelompok 7
+
+# Platform connectors
+whatsapp:
+  chat_id: "62895410748166@s.whatsapp.net"
+  channel_prompt: "AI Pentester Capstone Kelompok 7"
+
+telegram:
+  chat_id: "1427518133"
+  bot_token: "<token>"
+  channel_prompt: "AI Pentester — auto /start"
+
+# Auto-load skills
+platforms:
+  skills:
+    whatsapp:
+      - kelompok7-vpn
+      - kelompok7-pentest
+      - kelompok7-pdp-compliance
+    telegram:
+      - kelompok7-vpn
+      - kelompok7-pentest
+      - kelompok7-pdp-compliance
+
+# MCP tool servers
+mcp_servers:
+  pentest-tools:   65 tools  (PTG, CVE, BOLA, CVSS, Nuclei, Nmap...)
+  security-tools:  200+ tools (Recon, Vuln, Exploit, SAST, WAF...)
+  burp-api:        Burp Suite integration (proxy, repeater, scanner)
+  android-tools:   APK reverse engineering
+```
+
+### 3 Skills Wajib — Udah Di-load Otomatis
+
+| Skill | Fungsi | Trigger |
+|-------|--------|---------|
+| **🔌 kelompok7-vpn** | Auto-connect SSTP VPN ke `blackops.surf:6443`, add route `192.168.168.0/24`, siapin akses lab | Dipanggil tiap sesi dimulai |
+| **🔓 kelompok7-pentest** | Full workflow 8 fase: recon ➜ vuln scan ➜ auth ➜ exploit ➜ advanced ➜ validate ➜ PDP audit ➜ report. 75 teknik MITRE, 48 pasal UU PDP | User kirim `start` |
+| **⚖️ kelompok7-pdp-compliance** | Audit UU PDP: mapping temuan teknis ➜ pasal ➜ sanksi ➜ rekomendasi mitigasi. RAG-powered via ChromaDB | Otomatis di fase 7 |
 
 ---
 
@@ -526,6 +652,106 @@ Temuan Teknis                        UU PDP
 
 ---
 
+## 📱 Multi-Platform & Automation
+
+Salah satu kekuatan terbesar Hermes Agent di Unified-Shield adalah **lo gak perlu buka laptop buat jalanin pentest.** Cukup dari hape — WhatsApp atau Telegram — dan agent bakal mulai kerja.
+
+### Trigger Pentest dari WhatsApp
+
+Lo bisa jalanin full pentest langsung dari WhatsApp:
+
+```
+Lo (WA):        "start"
+                ↓
+Hermes Agent:   [Auto-load 3 skills]
+                [Connect VPN ke blackops.surf]
+                [Mulai 8 fase pentest]
+                [Generate report]
+                ↓
+Lo (WA):        "✅ Pentest selesai!
+                 📄 Report: 37KB, 14 sections
+                 🔴 2 P1, 🟠 1 P2, 🟡 2 P3
+                 ⚖️ Mapped ke Pasal 35, 38, 39 UU PDP"
+```
+
+**Cara setup:**
+1. Hermes WhatsApp bridge jalan di port `3000`
+2. Kirim `start` dari nomor yang terdaftar (`62895410748166`)
+3. Agent auto-detect trigger, langsung eksekusi tanpa konfirmasi
+4. Hasil dikirim balik ke WhatsApp dengan format ringkas
+
+**Fitur WhatsApp:**
+- `start` — Jalanin pentest full
+- `stop` — Stop pentest + disconnect VPN
+- `list` — Lihat temuan yang udah di-save
+- Chat bebas — Tanya progress, minta update, kirim perintah baru
+
+### Trigger Pentest dari Telegram
+
+Bot Telegram siap 24/7 buat auto-pentest:
+
+```
+Lo (Telegram):  "/start"
+                ↓
+Hermes Agent:   [Auto-load 3 skills]
+                [Connect VPN]
+                [8 fase pentest]
+                [Report langsung di chat]
+```
+
+**Fitur Telegram:**
+- `/start` — Trigger full pentest otomatis
+- `/stop` — Disconnect VPN
+- Auto-detection: `/start` dari chat ID terdaftar langsung jalan tanpa approval
+- Report dikirim sebagai Markdown dengan formatting rapi
+
+### Discord Webhook
+
+Buat notifikasi ke channel Discord Kelompok 7:
+
+```bash
+# Script kirim report ke Discord
+./scripts/discord-send.sh "Pentest selesai: 2 P1, 1 P2, 2 P3" /path/to/report.md
+```
+
+### Automation Engine
+
+| Fitur | Fungsi | Contoh |
+|--------|--------|--------|
+| **⏰ Cron Scheduler** | Jadwalin pentest otomatis | "Tiap jam 9 pagi, scan JumpServer + generate report" |
+| **🔄 Background Process** | Scan async tanpa nunggu | Nmap scan 1000 port di background, lanjut kerja lain |
+| **🧩 Delegate Task** | Sub-agent paralel | 3 VM di-scan bersamaan (NFS, Browser, Windows) |
+| **💾 Session Persistence** | Ingat semua temuan | Sesi sebelumnya nemu IDOR di `/api/v1/users/` → sesi berikutnya langsung tes variasi |
+| **📊 Dashboard** | Monitor real-time | HTTP dashboard di `localhost:8080` — liat request/response langsung |
+| **🔔 Alert** | Notifikasi real-time | Temuan P1 langsung kirim alert ke WA + Telegram |
+
+### Contoh Skenario: Weekend Automation
+
+```
+Jumat 22:00 → Cron trigger "Weekend Swarm"
+  │
+  ├── Sub-agent 1: Recon JumpServer (subfinder + nuclei + ffuf)
+  ├── Sub-agent 2: CVE scan semua VM internal (10.10.10.0/24)
+  └── Sub-agent 3: UU PDP audit + report generation
+  
+Sabtu 06:00 → Hasil dikirim ke WhatsApp:
+  "Weekend scan selesai:
+   🔴 1 P1 (baru!) — RDP Keyboard Injection
+   🟠 2 P2 — CVE-2024-6387, Auth Bypass
+   📄 Report: 42KB, ready to submit"
+```
+
+### Delivery Matrix
+
+| Platform | Trigger | Output | Approval |
+|----------|---------|--------|----------|
+| **WhatsApp** | Kirim `start` | Report di chat (+ file .md) | Auto — no approval |
+| **Telegram** | `/start` | Report di chat (+ Navigator JSON) | Auto — no approval |
+| **CLI** | `python run_graybox.py` | Terminal output + file | Interactive |
+| **Discord** | Manual/webhook | Embed message + file | Manual |
+
+---
+
 ## 🚀 Setup & Cara Pakai
 
 ### Prasyarat
@@ -647,8 +873,20 @@ Output `navigator.json` bisa di-load di [MITRE ATT&CK Navigator](https://mitre-a
 
 | Nama | Role | Kontribusi |
 |------|------|-----------|
-| **Vedara Alwi** | AI Agent Engineer | Orchestrator, MITRE Mapper, MCP integration, Tools Bridge |
-| _Anggota Kelompok 7_ | Security Team | Pentest execution, report generation, compliance audit |
+| **Vedara Alwi** | AI Agent Engineer | Hermes Agent integration, MITRE Mapper (75 techniques), MCP server architecture, Tools Bridge (120+ tools), WhatsApp/Telegram platform connectors, VPN automation, PTG anti-looping system |
+| _Anggota Kelompok 7_ | Security Team | Pentest execution, report generation, PDP compliance audit, infrastructure setup |
+
+### Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **AI Agent** | Hermes Agent (OpenSource) + OpenCode Go |
+| **LLM** | DeepSeek v4 (Pro + Flash) |
+| **MCP Servers** | pentest-tools (65t), security-tools (200+t), burp-api, android-tools |
+| **Security Tools** | Nmap, Nuclei, Metasploit, SQLMap, FFUF, Dalfox, Burp Suite, Wireshark |
+| **Backend** | Python 3.10+, FastAPI, ChromaDB, SQLite |
+| **Platform** | WhatsApp Bridge, Telegram Bot, Discord Webhook, CLI |
+| **Infra** | Docker, SSTP VPN, JumpServer (Bastion), Wazuh SIEM |
 
 ---
 
