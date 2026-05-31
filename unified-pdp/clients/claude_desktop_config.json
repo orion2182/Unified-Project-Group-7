@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "unified-pdp": {
+      "command": "python3",
+      "args": [
+        "/home/vedara/Documents/Kelompok 7/unified-pdp/mcp_server/main.py"
+      ],
+      "description": "Unified-PDP v1.0.0 — AI-Powered MCP Pentest Server with 150+ tools, MITRE ATT&CK, CVSS v3.1, and UU PDP Compliance",
+      "timeout": 300,
+      "disabled": false,
+      "env": {
+        "PYTHONPATH": "/home/vedara/Documents/Kelompok 7"
+      }
+    }
+  }
+}

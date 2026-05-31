@@ -274,27 +274,113 @@ PENTEST_ACTION_MAP = {
         "description": "Denial of service against endpoint"
     },
 
-    # Defense Evasion
+    # Stealth (TA0005) — techniques for hiding / avoiding detection
     "indicator_removal": {
         "technique_id": "T1070",
         "technique_name": "Indicator Removal",
         "subtechnique": None,
-        "tactic": "defense-evasion",
-        "description": "Removing indicators of compromise"
+        "tactic": "stealth",
+        "description": "Removing indicators of compromise to hide activity"
     },
-    "impair_defenses": {
-        "technique_id": "T1562",
-        "technique_name": "Impair Defenses",
-        "subtechnique": None,
-        "tactic": "defense-evasion",
-        "description": "Impairing security defenses"
+    "indicator_removal_logs": {
+        "technique_id": "T1070.001",
+        "technique_name": "Indicator Removal: Clear Windows Event Logs",
+        "subtechnique": "001",
+        "tactic": "stealth",
+        "description": "Clearing event logs to remove forensic evidence"
     },
     "obfuscated_files": {
         "technique_id": "T1027",
         "technique_name": "Obfuscated Files or Information",
         "subtechnique": None,
-        "tactic": "defense-evasion",
-        "description": "Obfuscating files or information to evade detection"
+        "tactic": "stealth",
+        "description": "Obfuscating files, payloads, or information to evade detection"
+    },
+    "masquerading": {
+        "technique_id": "T1036",
+        "technique_name": "Masquerading",
+        "subtechnique": None,
+        "tactic": "stealth",
+        "description": "Masquerading as legitimate process/file to blend in"
+    },
+    "timestomp": {
+        "technique_id": "T1070.006",
+        "technique_name": "Indicator Removal: Timestomp",
+        "subtechnique": "006",
+        "tactic": "stealth",
+        "description": "Modifying file timestamps to hide activity timeline"
+    },
+    "hide_artifacts": {
+        "technique_id": "T1564",
+        "technique_name": "Hide Artifacts",
+        "subtechnique": None,
+        "tactic": "stealth",
+        "description": "Hiding malicious artifacts from defenders"
+    },
+    "vm_sandbox_evasion": {
+        "technique_id": "T1497",
+        "technique_name": "Virtualization/Sandbox Evasion",
+        "subtechnique": None,
+        "tactic": "stealth",
+        "description": "Evading virtual machine or sandbox detection"
+    },
+    "impersonation": {
+        "technique_id": "T1656",
+        "technique_name": "Impersonation",
+        "subtechnique": None,
+        "tactic": "stealth",
+        "description": "Impersonating legitimate users or services to blend in"
+    },
+
+    # Defense Impairment (TA0112) — techniques for actively disabling/weakening defenses
+    "impair_defenses": {
+        "technique_id": "T1562",
+        "technique_name": "Impair Defenses",
+        "subtechnique": None,
+        "tactic": "defense-impairment",
+        "description": "Actively impairing or disabling security defenses (firewall, logging, monitoring)"
+    },
+    "disable_tools": {
+        "technique_id": "T1685",
+        "technique_name": "Disable or Modify Tools",
+        "subtechnique": None,
+        "tactic": "defense-impairment",
+        "description": "Disabling or modifying security tools (Wazuh agent, antivirus, EDR)"
+    },
+    "disable_firewall": {
+        "technique_id": "T1686",
+        "technique_name": "Disable or Modify System Firewall",
+        "subtechnique": None,
+        "tactic": "defense-impairment",
+        "description": "Disabling or modifying firewall rules to allow traffic"
+    },
+    "wazuh_evasion": {
+        "technique_id": "T1562.001",
+        "technique_name": "Impair Defenses: Disable or Modify Tools",
+        "subtechnique": "001",
+        "tactic": "defense-impairment",
+        "description": "Disabling or evading Wazuh SIEM detection"
+    },
+    "wazuh_alert_block": {
+        "technique_id": "T1562.006",
+        "technique_name": "Impair Defenses: Indicator Blocking",
+        "subtechnique": "006",
+        "tactic": "defense-impairment",
+        "description": "Blocking Wazuh → Telegram alert indicators"
+    },
+    "weaken_encryption": {
+        "technique_id": "T1600",
+        "technique_name": "Weaken Encryption",
+        "subtechnique": None,
+        "tactic": "defense-impairment",
+        "description": "Weakening or downgrading encryption to enable interception"
+    },
+    "downgrade_attack": {
+        "technique_id": "T1689",
+        "technique_name": "Downgrade Attack",
+        "subtechnique": None,
+        "tactic": "defense-impairment",
+        "description": "Forcing protocol/encryption downgrade to weaken security"
     },
 
     # Execution
@@ -350,6 +436,151 @@ PENTEST_ACTION_MAP = {
         "subtechnique": None,
         "tactic": "exfiltration",
         "description": "Data exfiltration via web services or APIs"
+    },
+
+    # Command & Control (TA0011)
+    "c2_encrypted_channel": {
+        "technique_id": "T1573",
+        "technique_name": "Encrypted Channel",
+        "subtechnique": None,
+        "tactic": "command-and-control",
+        "description": "Establishing encrypted C2 channel to avoid detection"
+    },
+    "c2_protocol_tunneling": {
+        "technique_id": "T1572",
+        "technique_name": "Protocol Tunneling",
+        "subtechnique": None,
+        "tactic": "command-and-control",
+        "description": "Tunneling C2 traffic over allowed protocols (DNS, HTTP, SSH)"
+    },
+    "c2_ingress_tool": {
+        "technique_id": "T1105",
+        "technique_name": "Ingress Tool Transfer",
+        "subtechnique": None,
+        "tactic": "command-and-control",
+        "description": "Transferring tools from external to internal network"
+    },
+    "c2_proxy": {
+        "technique_id": "T1090",
+        "technique_name": "Proxy",
+        "subtechnique": None,
+        "tactic": "command-and-control",
+        "description": "Using proxy for C2 communication (JumpServer as pivot proxy)"
+    },
+
+    # Resource Development (TA0042)
+    "vpn_infrastructure": {
+        "technique_id": "T1583",
+        "technique_name": "Acquire Infrastructure",
+        "subtechnique": None,
+        "tactic": "resource-development",
+        "description": "Setting up VPN infrastructure for attack operations"
+    },
+    "stage_capabilities": {
+        "technique_id": "T1608",
+        "technique_name": "Stage Capabilities",
+        "subtechnique": None,
+        "tactic": "resource-development",
+        "description": "Staging tools, payloads, and scripts on attack infrastructure"
+    },
+
+    # Additional Lateral Movement
+    "ssh_pivot": {
+        "technique_id": "T1021.004",
+        "technique_name": "Remote Services: SSH",
+        "subtechnique": "004",
+        "tactic": "lateral-movement",
+        "description": "SSH pivot from JumpServer to internal targets"
+    },
+    "vnc_pivot": {
+        "technique_id": "T1021.005",
+        "technique_name": "Remote Services: VNC",
+        "subtechnique": "005",
+        "tactic": "lateral-movement",
+        "description": "VNC access from JumpServer to browser VM"
+    },
+    "rdp_access": {
+        "technique_id": "T1021.001",
+        "technique_name": "Remote Services: Remote Desktop Protocol",
+        "subtechnique": "001",
+        "tactic": "lateral-movement",
+        "description": "RDP to Windows Server for lateral movement"
+    },
+    "smb_lateral": {
+        "technique_id": "T1021.002",
+        "technique_name": "Remote Services: SMB/Windows Admin Shares",
+        "subtechnique": "002",
+        "tactic": "lateral-movement",
+        "description": "SMB access to Windows Server shares"
+    },
+    "pass_the_hash": {
+        "technique_id": "T1550.002",
+        "technique_name": "Use Alternate Authentication Material: Pass the Hash",
+        "subtechnique": "002",
+        "tactic": "lateral-movement",
+        "description": "Pass-the-hash authentication for lateral movement"
+    },
+
+    # Network Pivot / Bridging
+    "vpn_connect": {
+        "technique_id": "T1133",
+        "technique_name": "External Remote Services",
+        "subtechnique": None,
+        "tactic": "initial-access",
+        "description": "SSTP VPN connection as initial access vector"
+    },
+    "network_bridge": {
+        "technique_id": "T1599",
+        "technique_name": "Network Boundary Bridging",
+        "subtechnique": None,
+        "tactic": "defense-impairment",
+        "description": "Bridging network boundaries via VPN/pivot to bypass segmentation"
+    },
+
+    # Execution (TA0002) — command execution
+    "shell_exec": {
+        "technique_id": "T1059.004",
+        "technique_name": "Command and Scripting Interpreter: Unix Shell",
+        "subtechnique": "004",
+        "tactic": "execution",
+        "description": "Executing commands via Unix shell on compromised host"
+    },
+    "ssh_exec": {
+        "technique_id": "T1021.004",
+        "technique_name": "Remote Services: SSH",
+        "subtechnique": "004",
+        "tactic": "execution",
+        "description": "Executing commands via SSH on remote host"
+    },
+    "container_exec": {
+        "technique_id": "T1610",
+        "technique_name": "Deploy Container",
+        "subtechnique": None,
+        "tactic": "execution",
+        "description": "Deploying container for code execution or persistence"
+    },
+
+    # Additional Credential Access
+    "forge_ticket": {
+        "technique_id": "T1558",
+        "technique_name": "Steal or Forge Kerberos Tickets",
+        "subtechnique": None,
+        "tactic": "credential-access",
+        "description": "Forging or stealing Kerberos tickets for authentication"
+    },
+    "credential_dump": {
+        "technique_id": "T1003",
+        "technique_name": "OS Credential Dumping",
+        "subtechnique": None,
+        "tactic": "credential-access",
+        "description": "Dumping OS credentials from compromised host"
+    },
+    "network_sniff": {
+        "technique_id": "T1040",
+        "technique_name": "Network Sniffing",
+        "subtechnique": None,
+        "tactic": "credential-access",
+        "description": "Sniffing network traffic for credentials"
     },
 }
 
@@ -863,7 +1094,10 @@ class MitreAttackMapper:
                 "collection": "#00FFFF",
                 "exfiltration": "#0000FF",
                 "impact": "#800080",
-                "defense-evasion": "#008080",
+                "stealth": "#008080",
+                "defense-impairment": "#800000",
+                "command-and-control": "#708090",
+                "resource-development": "#B8860B",
                 "execution": "#00FF00",
                 "persistence": "#008000",
             }

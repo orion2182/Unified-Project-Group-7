@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "unified-pdp": {
+      "type": "local",
+      "command": ["python3", "/home/vedara/Documents/Kelompok 7/unified-pdp/mcp_server/main.py"],
+      "enabled": true,
+      "timeout": 300000,
+      "env": {
+        "PYTHONPATH": "/home/vedara/Documents/Kelompok 7"
+      }
+    }
+  }
+}

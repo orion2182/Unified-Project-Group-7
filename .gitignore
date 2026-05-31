@@ -1,34 +1,58 @@
-# Sensitive credentials & configs
+# =========================================
+# SECURITY — JANGAN PERNAH COMMIT FILE INI
+# =========================================
+
+# Credentials & auth
 .env.graybox
 .env
+.env.*
 *.key
 *.pem
 *.crt
-config/secrets.yml
-config/database.yml
+*.p12
+*secret*
 
-# Virtual environment
-.venv/
-venv/
-env/
+# VPN & webhook config
+scripts/hermes-vpn.sh
+scripts/discord-send.sh
 
-# Python cache
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-*.egg-info/
-dist/
-build/
+# HAR files (contains session cookies, tokens, request data)
+*.har
+HAR/
 
-# ChromaDB vector store (contains UU PDP data)
+# Sensitive reports with findings evidence
+*jumpserver*
+*deep-dive*
+*penetration*
+*pentest-report*
+vm-connection-details.json
+
+# VM connection screenshots
+mitre-rdp-test/
+screenshots/
+
+# PTG (Penetration Task Graph — contains target topology)
+ptg/
+
+# EKB (Experience Knowledge Base — contains attack patterns)
+ekb/
+
+# Unified PDP MCP server (contains agent configs)
+unified-pdp/mcp_server/
+
+# OpenCode backup
+.opencode-backup.tar.gz
+
+# AI Agent config (contains persona/skill instructions)
+CLAUDE.md
+GEMINI.md
+
+# Reflections & notes
+reflections/
+summaries/
+
+# ChromaDB vector store (auto-generated)
 db_uu_pdp/
-
-# Reports with sensitive findings
-reports/
-*.pdf
-*.md.bak
 
 # Metasploit payloads (binary exploits)
 payloads/
@@ -37,25 +61,47 @@ payloads/
 *.apk
 *.war
 *.php
+*.dll
 
-# OS files
-.DS_Store
-Thumbs.db
+# =========================================
+# PYTHON
+# =========================================
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
 
-# IDE
+# =========================================
+# IDE & OS
+# =========================================
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
+.DS_Store
+Thumbs.db
 
-# Logs
+# =========================================
+# LOGS & TEMP
+# =========================================
 *.log
 logs/
-
-# Temporary files
 tmp/
 temp/
 *.tmp
 
-# MCP node modules
+# =========================================
+# MISC
+# =========================================
 .opencode/node_modules/
+*.md.bak
+*.pdf

